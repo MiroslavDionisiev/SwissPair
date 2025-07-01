@@ -5,6 +5,8 @@ export async function up(knex: Knex): Promise<void> {
     table.increments("id").primary();
     table.integer("tournament_id").notNullable().references("tournaments");
     table.text("player_name").notNullable();
+    table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
+    table.timestamp("updated_at").defaultTo(knex.fn.now()).notNullable();
   });
 }
 
