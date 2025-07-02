@@ -5,8 +5,6 @@ export class Player extends BaseModel {
   id!: number;
   tournament_id!: string;
   name!: string;
-  created_at!: string;
-  updated_at!: string;
 
   static get tableName() {
     return "players";
