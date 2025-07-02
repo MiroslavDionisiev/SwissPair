@@ -1,5 +1,5 @@
 import { BaseModel } from "./base"
-import { Tournament } from "./tournament"
+import { TournamentModel } from "./tournament"
 
 export class Player extends BaseModel {
   id!: number;
@@ -28,7 +28,7 @@ export class Player extends BaseModel {
     return {
       tournament: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: Tournament,
+        modelClass: TournamentModel,
         join: {
           from: "players.tournamentId",
           to: "tournaments.id",
