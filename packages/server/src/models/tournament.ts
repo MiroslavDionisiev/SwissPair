@@ -1,7 +1,7 @@
 import { BaseModel } from "./base";
 import { randomUUID } from 'crypto';
 
-export enum TournamentStatus{
+export enum TournamentStatus {
 	pending = 'pending',
 	active = 'active',
 	completed = 'completed'
@@ -28,10 +28,10 @@ export class TournamentModel extends BaseModel {
 	}
 
 	async $beforeInsert(context: any) {
-    await super.$beforeInsert(context);
-    if (!this.id) {
-      this.id = randomUUID();
-    }
-  }
+		await super.$beforeInsert(context);
+		if (!this.id) {
+			this.id = randomUUID();
+		}
+	}
 
 }
