@@ -3,7 +3,7 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('tournaments', (table) => {
-        table.uuid('id').primary().defaultTo(knex.fn.uuid());
+        table.uuid('id').primary();
         table.string('tournament_name').notNullable();
         table.enum('status', ['pending', 'active', 'completed']).defaultTo('pending');
         table.integer('rounds_to_play').nullable();
@@ -14,6 +14,6 @@ export async function up(knex: Knex): Promise<void> {
 
 
 export async function down(knex: Knex): Promise<void> {
-    knex.schema.dropTable('tournaments');
+    return knex.schema.dropTable('tournaments');
 }
 
