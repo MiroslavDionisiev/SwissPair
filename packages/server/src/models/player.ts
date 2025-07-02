@@ -1,5 +1,5 @@
 import { BaseModel } from "./base"
-//import { Tournament } from "./tournament"
+import { Tournament } from "./tournament"
 
 export class Player extends BaseModel {
   id!: number;
