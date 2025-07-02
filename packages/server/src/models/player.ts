@@ -3,7 +3,7 @@ import { Tournament } from "./tournament"
 
 export class Player extends BaseModel {
   id!: number;
-  tournament_id!: string;
+  tournamentId!: string;
   name!: string;
 
   static get tableName() {
@@ -13,10 +13,10 @@ export class Player extends BaseModel {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["tournament_id", "name"],
+      required: ["tournamentId", "name"],
       properties: {
         id: { type: "integer" },
-        tournament_id: { type: "string", format: "uuid" },
+        tournamentId: { type: "string", format: "uuid" },
         name: { type: "string" },
         created_at: { type: "string", format: "date-time" },
         updated_at: { type: "string", format: "date-time" },
@@ -30,7 +30,7 @@ export class Player extends BaseModel {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: Tournament,
         join: {
-          from: "players.tournament_id",
+          from: "players.tournamentId",
           to: "tournaments.id",
         },
       },
