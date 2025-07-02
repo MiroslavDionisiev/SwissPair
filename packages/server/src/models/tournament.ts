@@ -1,24 +1,28 @@
 import { BaseModel } from "./base";
 import { randomUUID } from 'crypto';
 
+export enum TournamentStatus{
+	pending = 'pending',
+	active = 'active',
+	completed = 'completed'
+}
+
 export class TournamentModel extends BaseModel {
 	id!: string;
-	tournament_name!: string;
-	status!: 'pending' | 'active' | 'completed';
-	rounds_to_play!: number | null;
+	tournamentName!: string;
+	status!: TournamentStatus;
+	roundsToPlay!: number | null;
 
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['tournament_name'],
+			required: ['tournamentName'],
 
 			properties: {
 				id: { type: 'string', format: 'uuid' },
 				tournamentName: { type: 'string', minLength: 1 },
-				status: { type: 'string', enum: ['pending', 'active', 'completed'], default: 'pending' },
+				status: { type: 'string', enum: Object.values(TournamentStatus), default: TournamentStatus.pending },
 				roundsToPlay: { type: ['integer', 'null'] },
-				createdAt: { type: 'string', format: 'date-time' },
-				updatedAt: { type: 'string', format: 'date-time' },
 			},
 		};
 	}
