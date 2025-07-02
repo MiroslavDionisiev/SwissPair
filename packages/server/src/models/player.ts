@@ -1,5 +1,5 @@
 import { BaseModel } from "./base"
-//import { Tournament } from "./tournament_model"
+//import { Tournament } from "./tournament"
 
 export class Player extends BaseModel {
   id!: number;
@@ -24,16 +24,16 @@ export class Player extends BaseModel {
     };
   }
 
-  //static get relationMappings() {
-  //  return {
-  //    tournament: {
-  //      relation: BaseModel.BelongsToOneRelation,
-  //      modelClass: Tournament,
-  //      join: {
-  //        from: "players.tournament_id",
-  //        to: "tournaments.id",
-  //      },
-  //    },
-  //  };
-  //}
+  static get relationMappings() {
+    return {
+      tournament: {
+        relation: BaseModel.BelongsToOneRelation,
+        modelClass: Tournament,
+        join: {
+          from: "players.tournament_id",
+          to: "tournaments.id",
+        },
+      },
+    };
+  }
 }
