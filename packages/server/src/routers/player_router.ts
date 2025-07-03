@@ -73,11 +73,38 @@ async function deletePlayer(req: express.Request, res: express.Response) {
     res.status(200);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to delete players" });
+    res.status(500).json({ "error": "Failed to delete the player" });
   }
+}
+
+async function createPlayers(req: express.Request, res: express.Response) {
+  const { tournamentID } = req.params
+  const names: string[] = req.body.names
+
+  if (!Array.isArray(names) || names.length === 0) {
+    return res.status(400).json({ "error": "Error incorrectly provided names of the players" });
+  }
+
+  for (const name of names) {
+    try {
+      await Player.query()
+        .insert({
+          tournamentId: tournamentID,
+          name: name,
+        })
+
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ "error": "Error unable to save the player to the database" })
+      return
+    }
+  }
+
+  res.sendStatus(200)
 }
 
 PlayerRouter.get("/:tournamentId/players", getPlayers)
 PlayerRouter.post("/:tournamentId/player", createPlayer)
+PlayerRouter.post("/:tournamentId/player", createPlayers as RequestHandler)
 PlayerRouter.patch("/:tournamentId/player", updatePlayer as RequestHandler)
 PlayerRouter.delete("/:tournamentId/player", deletePlayer as RequestHandler)
