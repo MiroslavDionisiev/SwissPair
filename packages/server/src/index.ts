@@ -4,7 +4,7 @@ import Knex from 'knex';
 import { Model } from 'objection';
 import knexConfig from '../knexfile';
 import { config } from './config';
-import { tournamentsRouter } from './routers/tournamentsRouter';
+import { tournamentsRouter } from './routers/tournament_router';
 
 const app = express();
 const port = config.get('server.port');

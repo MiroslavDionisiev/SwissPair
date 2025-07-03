@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTournament, getTournaments, getTournament, deleteTournament, updateTournament } from '../services/TournamentService';
+import { createTournament, getTournaments, getTournament, deleteTournament, updateTournament } from '../services/tournament_service';
 import { TournamentStatus } from '../models/tournament';
 
 export const tournamentsRouter = express.Router();
