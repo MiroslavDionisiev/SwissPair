@@ -33,7 +33,30 @@ function createPlayer(req: express.Request, res: express.Response) {
   }
 }
 
-function updatePlayer(req: express.Request, res: express.Response)
+function updatePlayer(req: express.Request, res: express.Response) {
+  const { tournamentID } = req.params
+
+  try {
+    const tournament = await TournamentModel.query()
+      .select("status")
+      .findById(tournamentID);
+
+    if (tournament?.status !== "pending") {
+      return res.status(400).json({ error: "Tournament is not pending." });
+    }
+
+    const updatedCount = await Player.query()
+      .patch({ name })
+      .where("tournamentId", tournamentID);
+
+    res.json({ updated: updatedCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update players" });
+  }
+
+}
 
 PlayerRouter.get("/:tournamentId/players", getPlayers)
 PlayerRouter.post("/:tournamentId/player", createPlayer)
+PlayerRouter.("/:tournamentId/player", createPlayer)
