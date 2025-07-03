@@ -1,13 +1,13 @@
-import express from "express"
+import express, { RequestHandler } from "express"
 import { Player } from "../models/player"
 import { TournamentModel } from "../models/tournament";
 
 export const PlayerRouter = express.Router()
 
-function getPlayers(req: express.Request, res: express.Response) {
+async function getPlayers(req: express.Request, res: express.Response) {
   const { tournamentID } = req.params
   try {
-    const players = Player.query()
+    const players = await Player.query()
       .select("name", "created_at", "updated_at")
       .where("tournamentId", tournamentID);
 
@@ -18,23 +18,23 @@ function getPlayers(req: express.Request, res: express.Response) {
   }
 }
 
-function createPlayer(req: express.Request, res: express.Response) {
+async function createPlayer(req: express.Request, res: express.Response) {
   const { tournamentID } = req.params
   try {
-    const players = await Player.query()
+    await Player.query()
       .insert({
         tournamentId: tournamentID,
         name: req.body.name,
       })
 
-    res.status(200)
+    res.sendStatus(200)
   } catch (error) {
     console.log(error)
     res.status(500).json({ "error": "Error unable to save the player to the database" })
   }
 }
 
-function updatePlayer(req: express.Request, res: express.Response) {
+async function updatePlayer(req: express.Request, res: express.Response) {
   const { tournamentID } = req.params
 
   try {
@@ -43,21 +43,41 @@ function updatePlayer(req: express.Request, res: express.Response) {
       .findById(tournamentID);
 
     if (tournament?.status !== "pending") {
-      return res.status(400).json({ error: "Tournament is not pending." });
+      return res.status(400).json({ "error": "Error can't update players while the tournament is active" });
     }
 
-    const updatedCount = await Player.query()
+    await Player.query()
       .patch({ name: req.body.name })
       .where("tournamentId", tournamentID);
 
-    res.json({ updated: updatedCount });
+    res.sendStatus(200);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to update players" });
   }
+}
 
+async function deletePlayer(req: express.Request, res: express.Response) {
+  const { tournamentID } = req.params
+
+  try {
+    const numDeleted = await Player.query()
+      .delete()
+      .where("tournamentId", tournamentID)
+      .andWhere("id", req.body.playerId)
+
+    if (numDeleted === 0) {
+      return res.status(404).json({ "error": "Error there is no player with that id for this tournament" });
+    }
+
+    res.status(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete players" });
+  }
 }
 
 PlayerRouter.get("/:tournamentId/players", getPlayers)
 PlayerRouter.post("/:tournamentId/player", createPlayer)
-PlayerRouter.put("/:tournamentId/player", updatePlayer)
+PlayerRouter.patch("/:tournamentId/player", updatePlayer as RequestHandler)
+PlayerRouter.delete("/:tournamentId/player", deletePlayer as RequestHandler)
