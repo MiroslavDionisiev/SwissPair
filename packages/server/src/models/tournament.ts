@@ -13,6 +13,10 @@ export class TournamentModel extends BaseModel {
   status!: TournamentStatus;
   roundsToPlay!: number | null;
 
+  static get tableName() {
+    return 'tournaments';
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
