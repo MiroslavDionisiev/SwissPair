@@ -1,5 +1,6 @@
 import express from "express"
 import { Player } from "../models/player"
+import { TournamentModel } from "../models/tournament";
 
 export const PlayerRouter = express.Router()
 
@@ -20,7 +21,7 @@ function getPlayers(req: express.Request, res: express.Response) {
 function createPlayer(req: express.Request, res: express.Response) {
   const { tournamentID } = req.params
   try {
-    const players = Player.query()
+    const players = await Player.query()
       .insert({
         tournamentId: tournamentID,
         name: req.body.name,
@@ -46,7 +47,7 @@ function updatePlayer(req: express.Request, res: express.Response) {
     }
 
     const updatedCount = await Player.query()
-      .patch({ name })
+      .patch({ name: req.body.name })
       .where("tournamentId", tournamentID);
 
     res.json({ updated: updatedCount });
@@ -59,4 +60,4 @@ function updatePlayer(req: express.Request, res: express.Response) {
 
 PlayerRouter.get("/:tournamentId/players", getPlayers)
 PlayerRouter.post("/:tournamentId/player", createPlayer)
-PlayerRouter.("/:tournamentId/player", createPlayer)
+PlayerRouter.put("/:tournamentId/player", updatePlayer)
