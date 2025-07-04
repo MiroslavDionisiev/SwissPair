@@ -14,8 +14,8 @@ export class RoundModel extends BaseModel{
     id!: number;
     tournamentId!: number;
     roundNumber!: number;
-    playerWhiteId!: number |null;
-    playerBlackId!: number | null;
+    playerWhiteId!: number;
+    playerBlackId!: number;
     roundResult!: RoundStatus | null;
 
     inTournament?: TournamentModel;
@@ -25,14 +25,14 @@ export class RoundModel extends BaseModel{
     static get jsonSchema(){
         return{
             type: 'object', 
-            required: ['id', 'tournamentId', 'roundNumber'], 
+            required: ['id', 'tournamentId', 'roundNumber', 'playerWhiteId', 'playerBlackId'], 
             properties: {
                 id: {type: 'integer'}, 
                 tournamentId: {type: 'integer'}, 
                 roundNumber: {type: 'integer'}, 
-                playerWhiteId: {type: ['integer', 'null']}, 
-                playerBlackId: {type: ['integer', 'null']}, 
-                roundResult: {type: ['string', 'null'], enum: Object.values(RoundStatus), default: null}
+                playerWhiteId: {type: 'integer'}, 
+                playerBlackId: {type: 'integer'}, 
+                roundResult: {type: ['string', 'null'], enum: [...Object.values(RoundStatus), null], default: null}
             }
         };
     }
