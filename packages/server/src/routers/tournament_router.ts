@@ -1,17 +1,28 @@
 import express from 'express';
 import { createTournament, getTournaments, getTournament, deleteTournament, updateTournament } from '../services/tournament_service';
 import { TournamentStatus } from '../models/tournament';
+import z from 'zod';
+
+const tournamentUpdateSchema = z.object({
+  tournamentName: z.string(),
+  status: z.nativeEnum(TournamentStatus),
+  roundsToPlay: z.number(),
+});
+
+const tournamentPostSchema = z.object({
+  tournamentName: z.string()
+})
 
 export const tournamentsRouter = express.Router();
 
 tournamentsRouter.post('/', async (req, res) => {
 
-  const tournamentName = req.body.tournamentName;
-
-  if (!tournamentName) {
-    res.status(400).json({ message: "Missing tournamentName field!" });
+  const parsed = tournamentPostSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ message: 'Invalid request body', errors: parsed.error.flatten() });
     return;
   }
+  const { tournamentName } = parsed.data;
 
   try {
     const newTournament = await createTournament(tournamentName);
@@ -35,11 +46,6 @@ tournamentsRouter.get('/', async (req, res) => {
 tournamentsRouter.get('/:id', async (req, res) => {
   const id: string = req.params.id;
 
-  if (!id) {
-    res.status(400).json({ message: "Missing id!" });
-    return;
-  }
-
   try {
     const tournament = await getTournament(id);
     res.status(200).json(tournament);
@@ -51,11 +57,6 @@ tournamentsRouter.get('/:id', async (req, res) => {
 tournamentsRouter.delete('/:id', async (req, res) => {
   const id: string = req.params.id;
 
-  if (!id) {
-    res.status(400).json({ message: "Missing id!" });
-    return;
-  }
-
   try {
     await deleteTournament(id);
     res.status(200).json({ message: "Tournament successfully deleted!" });
@@ -66,15 +67,13 @@ tournamentsRouter.delete('/:id', async (req, res) => {
 
 tournamentsRouter.put('/:id', async (req, res) => {
   const id: string = req.params.id;
-  const { tournamentName, status, roundsToPlay } = req.body;
-  if (
-    typeof tournamentName !== 'string' ||
-    (status !== TournamentStatus.pending && status !== TournamentStatus.active && status !== TournamentStatus.completed) ||
-    typeof roundsToPlay !== 'number'
-  ) {
-    res.status(400).json({ message: 'Invalid request body' });
+
+  const parsed = tournamentUpdateSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ message: 'Invalid request body', errors: parsed.error.flatten() });
     return;
   }
+  const { tournamentName, status, roundsToPlay } = parsed.data;
 
   try {
     const newTournament = await updateTournament(id, { tournamentName, status, roundsToPlay });
