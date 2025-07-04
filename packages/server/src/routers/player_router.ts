@@ -8,10 +8,9 @@ async function getPlayers(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
   try {
     const players = await Player.query()
-      .select("player_name", "created_at", "updated_at")
       .where("tournamentId", tournamentId);
 
-    res.status(200).json({ "players": players })
+    res.status(200).json({ players: players })
   } catch (error) {
     console.error(error)
     res.status(500).json({ "error": "Error unable to get the players from the database" })
@@ -21,18 +20,18 @@ async function getPlayers(req: express.Request, res: express.Response) {
 async function createPlayer(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
 
-  if (!req.body.name || req.body.name.trim() === "" || req.body.name == undefined) {
+  if (!req.body.name || req.body.name.trim() === "") {
     res.sendStatus(400).json({ "error": "Error there is no name provided" })
   }
 
   try {
-    await Player.query()
+    const player = await Player.query()
       .insert({
         tournamentId: tournamentId,
         playerName: req.body.name,
       })
 
-    res.sendStatus(200)
+    res.sendStatus(200).json({ player: player })
   } catch (error) {
     console.log(error)
     res.status(500).json({ "error": "Error unable to save the player to the database" })
@@ -106,25 +105,25 @@ async function createPlayers(req: express.Request, res: express.Response) {
     return res.status(400).json({ "error": "Error incorrectly provided names of the players" });
   }
 
-  let players: Player[] = []
+  try {
+    const insertedPlayers = await Player.transaction(async (trx) => {
+      return Promise.all(
+        names.map(name =>
+          Player.query(trx).insert({
+            tournamentId,
+            playerName: name,
+          })
+        )
+      );
+    });
 
-  for (const name of names) {
-    try {
-      const player = await Player.query()
-        .insert({
-          tournamentId: tournamentId,
-          playerName: name,
-        })
-
-      players.push(player)
-    } catch (error) {
-      console.log(error)
-      res.status(500).json({ "error": "Error unable to save the player to the database" })
-      return
-    }
+    res.status(200).json({ players: insertedPlayers })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ "error": "Error unable to save the player to the database" })
+    return
   }
 
-  res.sendStatus(200).json({ "players": players })
 }
 
 PlayerRouter.get("/:tournamentId/players", getPlayers)
