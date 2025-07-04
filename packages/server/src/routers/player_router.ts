@@ -75,6 +75,8 @@ async function updatePlayer(req: express.Request, res: express.Response) {
 }
 
 async function deletePlayer(req: express.Request, res: express.Response) {
+  const { tournamentId } = req.params
+
   if (!req.body.id || req.body.id == 0) {
     res.status(400).json({ "error": "Error there is no id of the player provided" })
     return
@@ -83,6 +85,7 @@ async function deletePlayer(req: express.Request, res: express.Response) {
   try {
     const numDeleted = await Player.query()
       .deleteById(req.body.id)
+      .where("tournamentId", tournamentId)
 
     if (numDeleted === 0) {
       return res.status(404).json({ "error": "Error there is no player with that id for this tournament" });
