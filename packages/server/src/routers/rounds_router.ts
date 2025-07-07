@@ -58,6 +58,15 @@ async function getAllRounds(req: express.Request, res: express.Response) {
 }
 
 async function getRoundById(req: express.Request, res: express.Response) {
+  const roundId = req.params.roundId;
+
+  try{
+    const round = await RoundModel.query().findById(roundId);
+    res.status(200).json(round);
+  }
+  catch(error){
+    res.status(404).json({message: 'ID not found!'});
+  }
 
 }
 
@@ -85,17 +94,18 @@ async function createRounds(req: express.Request, res: express.Response) {
   }
 
   try {
-    await RoundModel.query().insert(
+    const newRound = await RoundModel.query().insert(
       {
         tournamentId: Number(tournamentId), 
         roundNumber: roundNumber, 
         playerWhiteId: playerWhiteId, 
         playerBlackId: playerBlackId
       }
-    )
+    );
+    res.status(200).json(newRound);
   }
   catch(error){
-    res.status(500).json({message: 'Error creating player!'})
+    res.status(500).json({message: 'Error creating round!'});
   }
 }
 
