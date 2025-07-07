@@ -63,14 +63,24 @@ function getPlayerScores(rounds: RoundModel[]): SwissPlayer[] {
 }
 
 async function getAllRounds(req: express.Request, res: express.Response) {
+  const tournamentId = req.params.tournamentId;
 
+  try{
+    const allRounds = await RoundModel.query()
+    .where('tournamen_id', tournamentId);
+    res.status(200).json(allRounds);
+  }
+  catch(error){
+    res.status(400).json({message: "Couldn't get rounds!"});
+  }
 }
 
 async function getRoundById(req: express.Request, res: express.Response) {
   const roundId = req.params.roundId;
 
   try{
-    const round = await RoundModel.query().findById(roundId);
+    const round = await RoundModel.query()
+    .findById(roundId);
     res.status(200).json(round);
   }
   catch(error){
@@ -80,7 +90,18 @@ async function getRoundById(req: express.Request, res: express.Response) {
 }
 
 async function updateRound(req: express.Request, res: express.Response) {
+  const result = req.body.roundResult;
+  const roudnId = req.params.roundId;
 
+  try{
+    const updated = await RoundModel.query()
+    .patch({roundResult: result})
+    .where('id', roudnId);
+    res.status(200).json(updated);
+  }
+  catch(error){
+    res.status(500).json({message: 'Unable to update record!'});
+  }
 }
 
 async function createRounds(req: express.Request, res: express.Response) {
