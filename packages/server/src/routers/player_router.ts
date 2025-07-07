@@ -4,20 +4,20 @@ import { TournamentModel } from "../models/tournament";
 import z from 'zod';
 
 const playerCreateSchema = z.object({
-  name: z.string().min(1, "Name is required").trim(),
+  name: z.string().min(1, { message: "Name is required" }).trim(),
 });
 
 const playersCreateSchema = z.object({
-  names: z.array(z.string()).min(1, "Name is required"),
+  names: z.array(z.string()).min(1, { message: "Name is required" }),
 });
 
 const playerUpdateSchema = z.object({
-  name: z.string().min(1, "Name is required").trim(),
-  id: z.number().min(1, "Id is required"),
+  name: z.string().min(1, { message: "Name is required" }).trim(),
+  id: z.number().min(1, { message: "Id is required" }),
 });
 
 const playerDeleteSchema = z.object({
-  id: z.number().min(1, "Name is required"),
+  id: z.number().min(1, { message: "Name is required" }),
 });
 
 export const PlayerRouter = express.Router()
@@ -69,8 +69,7 @@ async function updatePlayer(req: express.Request, res: express.Response) {
     return res.status(400).json({ message: 'Invalid request body', errors: parseResult.error.flatten() });
   }
 
-  const name = parseResult.data.name;
-  const id = parseResult.data.id;
+  const { name, id } = parseResult.data;
 
   try {
     const tournament = await TournamentModel.query()
