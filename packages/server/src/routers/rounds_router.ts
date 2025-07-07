@@ -1,21 +1,27 @@
 import express from "express"
 import { RoundModel, RoundStatus } from "../models/round"
+import { Swiss } from "tournament-pairings"
+import { Player as PlayerInterface } from "tournament-pairings/dist/interfaces"
 
-export class SwissPlayer {
-  id!: String | Number// unique identifier
-  score!: Number// current score
-  pairedUpDown?: Boolean// if the player has been paired up/down prior (optional)
-  receivedBye?: Boolean// if the player has received a bye prior (optional)
-  avoid?: Array<String | Number>// array of IDs the player can not be paired with (optional)
+export class SwissPlayer implements PlayerInterface {
+  id!: string | number
+  score!: number
+  pairedUpDown?: boolean;
+  receivedBye?: boolean;
+  avoid?: Array<string | number>;
 
-  constructor(id: number | string, score: number,
-    pairedUpDown?: Boolean, receivedBye?: Boolean,
-    avoid?: Array<String | Number>) {
+  constructor(
+    id: number | string,
+    score: number,
+    pairedUpDown?: boolean,
+    receivedBye?: boolean,
+    avoid?: Array<string | number>
+  ) {
     this.id = id
     this.score = score
-    this.pairedUpDown = pairedUpDown
-    this.receivedBye = receivedBye
-    this.avoid = avoid
+    this.pairedUpDown = pairedUpDown;
+    this.receivedBye = receivedBye;
+    this.avoid = avoid;
   }
 }
 
@@ -28,6 +34,9 @@ function getPlayerScores(rounds: RoundModel[]): SwissPlayer[] {
     const whiteId = round.playerWhiteId;
     const blackId = round.playerBlackId;
     const result = round.roundResult;
+    if (result == null) {
+      return []
+    }
 
     if (!scores.has(whiteId)) {
       scores.set(whiteId, new SwissPlayer(whiteId, 0));
@@ -74,39 +83,57 @@ async function updateRound(req: express.Request, res: express.Response) {
 
 }
 
-//Returns array of objects of type Player
 async function createRounds(req: express.Request, res: express.Response) {
-  const tournamentId = req.params.tournamentId;
+  const { tournamentId } = req.body.params
 
-  const roundNumber = req.body.roundNumber;
-  if(!roundNumber){
-    res.status(400).json({message: 'Round number required!'});
-  }
-
-  const playerWhiteId = req.body.playerWhiteId;
-  if(!playerWhiteId){
-    res.status(400).json({message: 'Id of player with white pieces required!'});
-  }
-
-  const playerBlackId = req.body.playerBlackId;
-  if(!playerBlackId){
-    res.status(400).json({message: 'Id of player with black pieces required!'});
-  }
+  let roundNumber: RoundModel | undefined
+  let rounds: RoundModel[]
 
   try {
-    const newRound = await RoundModel.query().insert(
-      {
-        tournamentId: Number(tournamentId), 
-        roundNumber: roundNumber, 
-        playerWhiteId: playerWhiteId, 
-        playerBlackId: playerBlackId
-      }
-    );
-    res.status(200).json(newRound);
+    roundNumber = await RoundModel
+      .query()
+      .select("round_number")
+      .where('tournamentId', tournamentId)
+      .orderBy("round_number", "desc")
+      .first()
+
+    rounds = await RoundModel.query()
+      .where("tournamentId", tournamentId)
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({ error: "Error while trying to get the round number from the database" })
+    return
   }
-  catch(error){
-    res.status(500).json({message: 'Error creating round!'});
+
+  const players = getPlayerScores(rounds)
+  if (!players || players.length === 0) {
+    res.send(400).json({ error: "Error unable to create new rounds while the old ones are still running" })
+    return
   }
+
+  if (roundNumber == undefined) {
+    res.status(400).json({ error: "Error unable to get the round number" })
+    return
+  }
+
+  const round = roundNumber.roundNumber
+
+  const newRounds = Swiss(players, round + 1)
+
+  let result: RoundModel[] | undefined
+
+  result = await Promise.all(
+    newRounds.map(match =>
+      RoundModel.query().insert({
+        tournamentId,
+        roundNumber: match.round,
+        playerWhiteId: match.player1,
+        playerBlackId: match.player2,
+      } as Partial<RoundModel>)
+    )
+  );
+
+  res.send(200).json({ "success": result })
 }
 
 RoundRouter.get("/:tournamentId/rounds", getAllRounds)
