@@ -8,7 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'brand-yellow': '#FFEE08',
+        'black': '#000000',
+        'gray-dark': '#8B8B8B',
+        'gray-light': '#E6E9EF',
+        'white': '#FFFFFF',
+        'yellow-light': '#FFFCCF',
+        'yellow-dark': '#FFEE08',
+        'red-custom': '#FD0130',
+        'green-custom': '#02F272',
       },
     },
   },
