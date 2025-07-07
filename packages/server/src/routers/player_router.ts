@@ -152,8 +152,8 @@ async function createPlayers(req: express.Request, res: express.Response) {
 
 }
 
-PlayerRouter.get("/:tournamentId/players", getPlayers)
-PlayerRouter.post("/:tournamentId/player", createPlayer as RequestHandler)
-PlayerRouter.post("/:tournamentId/players", createPlayers as RequestHandler)
-PlayerRouter.put("/:tournamentId/player", updatePlayer as RequestHandler)
-PlayerRouter.delete("/:tournamentId/player", deletePlayer as RequestHandler)
+PlayerRouter.get("/", getPlayers)
+PlayerRouter.post("/", createPlayer as RequestHandler)
+PlayerRouter.post("/bulk", createPlayers as RequestHandler)
+PlayerRouter.put("/", updatePlayer as RequestHandler)
+PlayerRouter.delete("/", deletePlayer as RequestHandler)

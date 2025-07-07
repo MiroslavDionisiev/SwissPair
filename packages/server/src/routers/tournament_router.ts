@@ -84,4 +84,4 @@ tournamentsRouter.put('/:id', async (req, res) => {
   }
 })
 
-tournamentsRouter.use("/", PlayerRouter)
+tournamentsRouter.use("/:tournamentId/players", PlayerRouter)
