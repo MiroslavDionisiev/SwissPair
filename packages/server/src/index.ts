@@ -4,7 +4,7 @@ import Knex from 'knex';
 import { Model } from 'objection';
 import knexConfig from '../knexfile';
 import { config } from './config';
-import { PlayerRouter } from './routers/player_router';
+import { tournamentsRouter } from './routers/tournament_router';
 
 const app = express();
 const port = config.get('server.port');
@@ -14,7 +14,8 @@ Model.knex(knexClient);
 
 app.use(cors());
 app.use(json());
-app.use("/test", PlayerRouter)
+
+app.use('/tournaments', tournamentsRouter);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
