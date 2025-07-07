@@ -1,4 +1,5 @@
 import express from "express"
+import { RoundModel } from "../models/round"
 
 export class Player {
   id!: String | Number// unique identifier
@@ -33,7 +34,36 @@ async function updateRound(req: express.Request, res: express.Response) {
 }
 
 async function createRounds(req: express.Request, res: express.Response) {
+  const tournamentId = req.params.tournamentId;
 
+  const roundNumber = req.body.roundNumber;
+  if(!roundNumber){
+    res.status(400).json({message: 'Round number required!'});
+  }
+
+  const playerWhiteId = req.body.playerWhiteId;
+  if(!playerWhiteId){
+    res.status(400).json({message: 'Id of player with white pieces required!'});
+  }
+
+  const playerBlackId = req.body.playerBlackId;
+  if(!playerBlackId){
+    res.status(400).json({message: 'Id of player with black pieces required!'});
+  }
+
+  try {
+    await RoundModel.query().insert(
+      {
+        tournamentId: Number(tournamentId), 
+        roundNumber: roundNumber, 
+        playerWhiteId: playerWhiteId, 
+        playerBlackId: playerBlackId
+      }
+    )
+  }
+  catch(error){
+    res.status(500).json({message: 'Error creating player!'})
+  }
 }
 
 RoundRouter.get("/:tournamentId/rounds", getAllRounds)
