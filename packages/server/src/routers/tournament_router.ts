@@ -2,6 +2,7 @@ import express from 'express';
 import { createTournament, getTournaments, getTournament, deleteTournament, updateTournament } from '../services/tournament_service';
 import { TournamentStatus } from '../models/tournament';
 import z from 'zod';
+import { PlayerRouter } from './player_router';
 
 const tournamentUpdateSchema = z.object({
   tournamentName: z.string(),
@@ -82,3 +83,5 @@ tournamentsRouter.put('/:id', async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 })
+
+tournamentsRouter.use("/tournament", PlayerRouter)

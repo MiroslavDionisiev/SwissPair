@@ -1,6 +1,24 @@
 import express, { RequestHandler } from "express"
 import { Player } from "../models/player"
 import { TournamentModel } from "../models/tournament";
+import z from 'zod';
+
+const playerCreateSchema = z.object({
+  name: z.string().min(1, "Name is required").trim(),
+});
+
+const playersCreateSchema = z.object({
+  names: z.array(z.string()).min(1, "Name is required"),
+});
+
+const playerUpdateSchema = z.object({
+  name: z.string().min(1, "Name is required").trim(),
+  id: z.number().min(1, "Id is required"),
+});
+
+const playerDeleteSchema = z.object({
+  id: z.number().min(1, "Name is required"),
+});
 
 export const PlayerRouter = express.Router()
 
@@ -20,15 +38,19 @@ async function getPlayers(req: express.Request, res: express.Response) {
 async function createPlayer(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
 
-  if (!req.body.name || req.body.name.trim() === "") {
-    res.sendStatus(400).json({ "error": "Error there is no name provided" })
+  const parseResult = playerCreateSchema.safeParse(req.body);
+
+  if (!parseResult.success) {
+    return res.status(400).json({ message: 'Invalid request body', errors: parseResult.error.flatten() });
   }
+
+  const name = parseResult.data.name;
 
   try {
     const player = await Player.query()
       .insert({
         tournamentId: tournamentId,
-        playerName: req.body.name,
+        playerName: name,
       })
 
     res.sendStatus(200).json({ player: player })
@@ -41,16 +63,14 @@ async function createPlayer(req: express.Request, res: express.Response) {
 async function updatePlayer(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
 
-  console.log(req.body)
+  const parseResult = playerUpdateSchema.safeParse(req.body);
 
-  if (!req.body.id || req.body.id == 0) {
-    res.status(400).json({ "error": "Error there is player id name provided" })
-    return
+  if (!parseResult.success) {
+    return res.status(400).json({ message: 'Invalid request body', errors: parseResult.error.flatten() });
   }
 
-  if (!req.body.name || req.body.name.trim() === "") {
-    res.sendStatus(400).json({ "error": "Error there is no name provided" })
-  }
+  const name = parseResult.data.name;
+  const id = parseResult.data.id;
 
   try {
     const tournament = await TournamentModel.query()
@@ -62,9 +82,9 @@ async function updatePlayer(req: express.Request, res: express.Response) {
     }
 
     await Player.query()
-      .patch({ playerName: req.body.name })
+      .patch({ playerName: name })
       .where("tournamentId", tournamentId)
-      .andWhere("id", req.body.id)
+      .andWhere("id", id)
 
     res.sendStatus(200);
   } catch (error) {
@@ -76,14 +96,17 @@ async function updatePlayer(req: express.Request, res: express.Response) {
 async function deletePlayer(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
 
-  if (!req.body.id || req.body.id == 0) {
-    res.status(400).json({ "error": "Error there is no id of the player provided" })
-    return
+  const parseResult = playerDeleteSchema.safeParse(req.body);
+
+  if (!parseResult.success) {
+    return res.status(400).json({ message: 'Invalid request body', errors: parseResult.error.flatten() });
   }
+
+  const id = parseResult.data.id;
 
   try {
     const numDeleted = await Player.query()
-      .deleteById(req.body.id)
+      .deleteById(id)
       .where("tournamentId", tournamentId)
 
     if (numDeleted === 0) {
@@ -99,11 +122,14 @@ async function deletePlayer(req: express.Request, res: express.Response) {
 
 async function createPlayers(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
-  const names: string[] = req.body.names
 
-  if (!Array.isArray(names) || names.length === 0) {
-    return res.status(400).json({ "error": "Error incorrectly provided names of the players" });
+  const parseResult = playersCreateSchema.safeParse(req.body);
+
+  if (!parseResult.success) {
+    return res.status(400).json({ message: 'Invalid request body', errors: parseResult.error.flatten() });
   }
+
+  const names = parseResult.data.names;
 
   try {
     const insertedPlayers = await Player.transaction(async (trx) => {
@@ -127,7 +153,7 @@ async function createPlayers(req: express.Request, res: express.Response) {
 }
 
 PlayerRouter.get("/:tournamentId/players", getPlayers)
-PlayerRouter.post("/:tournamentId/player", createPlayer)
+PlayerRouter.post("/:tournamentId/player", createPlayer as RequestHandler)
 PlayerRouter.post("/:tournamentId/players", createPlayers as RequestHandler)
 PlayerRouter.put("/:tournamentId/player", updatePlayer as RequestHandler)
 PlayerRouter.delete("/:tournamentId/player", deletePlayer as RequestHandler)
