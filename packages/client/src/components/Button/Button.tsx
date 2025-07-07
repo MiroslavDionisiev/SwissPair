@@ -1,3 +1,5 @@
+import { twMerge } from "tailwind-merge"
+
 export enum ButtonVariants {
   yellow,
   black,
@@ -23,10 +25,12 @@ export interface ButtonProps {
 }
 
 export default function Button(props: ButtonProps) {
+  const mergedClassName = twMerge(buttonStyles.common, buttonStyles[props.variant], props.className)
+
   return (
     <button
       style={clip}
-      className={buttonStyles.common + buttonStyles[props.variant] + props.className}
+      className={mergedClassName}
       onClick={props.onClick}>
       {props.content}
     </button>
