@@ -7,7 +7,7 @@ export enum ButtonVariants {
 }
 
 export const buttonStyles = {
-  common: "border-none font-[500] px-[2rem] py-[1rem] cursor-pointer duration-500 ",
+  common: "border-none outline-none font-[500] px-[2rem] py-[1rem] cursor-pointer duration-500 ",
   [ButtonVariants.black]: "bg-black text-yellow-dark hover:text-black hover:bg-yellow-dark ",
   [ButtonVariants.yellow]: "bg-yellow-dark text-black hover:text-yellow-dark hover:bg-black ",
   [ButtonVariants.disabled]: "bg-yellow-light text-gray-dark cursor-default "
