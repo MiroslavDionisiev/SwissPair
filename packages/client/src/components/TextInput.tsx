@@ -18,13 +18,13 @@ const inputStyles = {
 };
 
 const labelStyles = {
-  dark: "text-yellow-dark font-bold uppercase text-xs mb-2",
-  light: "text-black font-bold uppercase text-xs mb-2",
-  red: "text-red-custom font-bold uppercase text-xs mb-2",
-  disabled: "text-red-custom font-bold uppercase text-xs mb-2",
+  dark: "text-yellow-dark font-[600] uppercase text-l mb-2",
+  light: "text-black font-[600] uppercase text-l mb-2",
+  red: "text-red-custom font-[600] uppercase text-l mb-2",
+  disabled: "text-red-custom font-[600] uppercase text-l mb-2",
 };
 
-const defaultStyles = "w-full h-14 px-4 py-3 outline-none transition-colors duration-200";
+const defaultStyles = "p-[1rem] outline-none transition-colors duration-200";
 
 export function TextInput({
   label,
@@ -36,7 +36,7 @@ export function TextInput({
 }: TextInputProps) {
   const isDisabled = variant === "disabled";
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       <label className={twMerge(labelStyles[variant])}>{label}</label>
       <input
         type="text"
