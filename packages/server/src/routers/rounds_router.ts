@@ -103,7 +103,7 @@ async function getAllRounds(req: express.Request, res: express.Response) {
 
   try {
     const allRounds = await RoundModel.query()
-    .where('tournamen_id', tournamentId);
+    .where('tournament_id', tournamentId);
     res.status(200).json({rounds: allRounds});
   }
   catch (error) {
