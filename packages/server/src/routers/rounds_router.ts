@@ -2,6 +2,7 @@ import express from "express"
 import { RoundModel, RoundStatus } from "../models/round"
 import { Swiss } from "tournament-pairings"
 import { Player as PlayerInterface } from "tournament-pairings/dist/interfaces"
+import { TournamentModel } from "../models/tournament"
 
 export class SwissPlayer implements PlayerInterface {
   id!: string | number
@@ -103,8 +104,8 @@ async function getAllRounds(req: express.Request, res: express.Response) {
 
   try {
     const allRounds = await RoundModel.query()
-    .where('tournament_id', tournamentId);
-    res.status(200).json({rounds: allRounds});
+      .where('tournament_id', tournamentId);
+    res.status(200).json({ rounds: allRounds });
   }
   catch (error) {
     res.status(400).json({ message: "Couldn't get rounds!" });
@@ -116,8 +117,8 @@ async function getRoundById(req: express.Request, res: express.Response) {
 
   try {
     const round = await RoundModel.query()
-    .findById(roundId);
-    res.status(200).json({round: round});
+      .findById(roundId);
+    res.status(200).json({ round: round });
   }
   catch (error) {
     res.status(404).json({ message: 'ID not found!' });
@@ -129,11 +130,11 @@ async function updateRound(req: express.Request, res: express.Response) {
   const result = req.body.roundResult;
   const roundId = req.params.roundId;
 
-  try{
+  try {
     const round = await RoundModel.query()
-    .patch({roundResult: result})
-    .where('id', roundId);
-    res.status(200).json({round: round});
+      .patch({ roundResult: result })
+      .where('id', roundId);
+    res.status(200).json({ round: round });
   }
   catch (error) {
     res.status(500).json({ message: 'Unable to update record!' });
@@ -148,12 +149,23 @@ async function createRounds(req: express.Request, res: express.Response) {
       .query()
       .where("tournamentId", tournamentId);
 
+    const t = await TournamentModel
+      .query()
+      .select("roundsToPlay")
+      .where("id", tournamentId)
+      .first()
+
     const currentRoundNumber = rounds.length > 0
       ? Math.max(...rounds.map(r => r.roundNumber))
       : 0;
 
     if (currentRoundNumber == 0) {
       res.status(400).json({ error: "Error unable to get the round number" })
+      return
+    }
+
+    if (t?.roundsToPlay == currentRoundNumber) {
+      res.status(403).json({ error: "Error no more rounds to be played" })
       return
     }
 
