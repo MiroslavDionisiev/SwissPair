@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
 
 export enum ButtonVariants {
@@ -18,7 +19,7 @@ const clip = {
 }
 
 export interface ButtonProps {
-  content: string,
+  content: string | ReactNode,
   variant: ButtonVariants,
   className?: string,
   onClick: () => void
