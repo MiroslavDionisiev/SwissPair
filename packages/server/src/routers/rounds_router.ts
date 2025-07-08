@@ -68,7 +68,7 @@ async function getAllRounds(req: express.Request, res: express.Response) {
   try{
     const allRounds = await RoundModel.query()
     .where('tournamen_id', tournamentId);
-    res.status(200).json(allRounds);
+    res.status(200).json({rounds: allRounds});
   }
   catch(error){
     res.status(400).json({message: "Couldn't get rounds!"});
@@ -81,7 +81,7 @@ async function getRoundById(req: express.Request, res: express.Response) {
   try{
     const round = await RoundModel.query()
     .findById(roundId);
-    res.status(200).json(round);
+    res.status(200).json({round: round});
   }
   catch(error){
     res.status(404).json({message: 'ID not found!'});
@@ -91,13 +91,13 @@ async function getRoundById(req: express.Request, res: express.Response) {
 
 async function updateRound(req: express.Request, res: express.Response) {
   const result = req.body.roundResult;
-  const roudnId = req.params.roundId;
+  const roundId = req.params.roundId;
 
   try{
-    const updated = await RoundModel.query()
+    const round = await RoundModel.query()
     .patch({roundResult: result})
-    .where('id', roudnId);
-    res.status(200).json(updated);
+    .where('id', roundId);
+    res.status(200).json({round: round});
   }
   catch(error){
     res.status(500).json({message: 'Unable to update record!'});
