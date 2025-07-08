@@ -16,7 +16,9 @@ export default function ModalComponent({ modalName }: ModalProps) {
             <Button variant={ButtonVariants.yellow} onClick={() => setIsOpen(true)} content={modalName ? modalName : ""}></Button>
             <Modal
                 isOpen={isOpen}
-                className='inline-flex flex-col min-w-[560px] items-center justify-self-center outline-none'>
+                overlayClassName="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60"
+                className='bg-white inline-flex flex-col min-w-[560px] items-center justify-self-center outline-none rounded shadow-lg'
+            >
                 <div className='bg-black text-white flex justify-between text-xl px-4 w-[100%] items-center'>
                     <h2 className='font-bold uppercase'>{modalName}</h2>
                     <Button content='X' variant={ButtonVariants.black} onClick={() => { setIsOpen(false) }} />
@@ -30,8 +32,6 @@ export default function ModalComponent({ modalName }: ModalProps) {
                         <Button className='' content='CREATE' variant={ButtonVariants.yellow} onClick={() => { setIsOpen(false) }} />
                     </div>
                 </div>
-
-
             </Modal>
         </div>
 

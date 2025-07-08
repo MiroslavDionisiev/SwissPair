@@ -1,5 +1,6 @@
-import Button from "../components/Button/Button";
+import Button, { ButtonVariants } from "../components/Button/Button";
 import { TablesComponent } from "../components/TablesComponent";
+import ModalComponent from "../components/ModalComponent";
 
 const tournamentsData = [
   { name: "Plovdiv Chess Open", players: 20, rounds: "1/5", time: "00:00:13" },
@@ -19,7 +20,7 @@ export function HomePage() {
         </div>
       </div>
       <div className="absolute top-5 right-5 z-10">
-        <Button onClick={() => { console.log('Dark mode toggled'); }} variant="buttonStyleBlack" content="Dark Mode" />
+        <Button onClick={() => { console.log('Dark mode toggled'); }} variant={ButtonVariants.black} content="Dark Mode" />
       </div>
 
       <div className="flex flex-col items-center mt-16 mb-8">
@@ -29,8 +30,9 @@ export function HomePage() {
         <div className="text-xl text-center mb-8 text-black/80">
           Your simple swiss bracket solution.
         </div>
-        <Button onClick={() => { console.log('Create tournament clicked'); }} variant="buttonStyleYellow" content="Create a tournament" />
-      </div>
+        {/* <Button onClick={() => { console.log('Create tournament clicked'); }} variant="buttonStyleYellow" content="Create a tournament" /> */}
+        <ModalComponent modalName="Create a Tournament" />
+        </div>
 
       <div className="my-8 text-4xl ">↓</div>
 
