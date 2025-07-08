@@ -1,10 +1,15 @@
 import './app.module.css';
 import './index.css';
+import ModalComponent from './components/Button/ModalComponent';
 
 export function App() {
   return (
     <div>
-      test
+      <ModalComponent
+        modalName='CREATE A TOURNAMENT'
+      />
+      
+      
     </div>
   );
 }
