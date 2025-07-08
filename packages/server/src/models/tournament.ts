@@ -15,8 +15,6 @@ export class TournamentModel extends BaseModel {
   status!: TournamentStatus;
   roundsToPlay!: number | null;
 
-  players?: PlayerModel[]
-
   static get tableName() {
     return 'tournaments';
   }
