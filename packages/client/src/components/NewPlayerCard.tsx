@@ -1,5 +1,7 @@
 import { useState } from "react";
-import Button, { ButtonVariants } from "./Button/Button";
+import Button, { ButtonVariants } from "./Button";
+import Pencil from "../icons/pencil";
+import Trashcan from "../icons/trashcan";
 
 export default function NewPlayerCard({ playerName, onDelete, onEdit }: { playerName: string, onDelete: () => void, onEdit: () => void }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -27,8 +29,8 @@ export default function NewPlayerCard({ playerName, onDelete, onEdit }: { player
                 <h2 onClick={() => setIsEditing(true)} className="text-xl">{inputValue}</h2>
             )}
             <div className="flex gap-5">
-                <Button variant={ButtonVariants.yellow} onClick={() => onEdit()} content="E"></Button>
-                <Button variant={ButtonVariants.black} onClick={() => onDelete()} content="D"></Button>
+                <Button className="group" variant={ButtonVariants.yellow} onClick={() => onEdit()} content={<Pencil className="stroke-black group-hover:stroke-yellow-dark duration-500"/>} />
+                <Button className='group' variant={ButtonVariants.black} onClick={() => onDelete()} content={<Trashcan className="fill-yellow-dark group-hover:fill-black duration-500"/>}/>
             </div>
         </div>
     )

@@ -1,7 +1,9 @@
 import { useState } from "react";
-import Button, { ButtonVariants } from "../components/Button/Button";
+import Button, { ButtonVariants } from "../components/Button";
 import { TextInput } from "../components/TextInput";
 import NewPlayerCard from "../components/NewPlayerCard";
+import Arrow from "../icons/arrow";
+import Link from "../icons/link"
 
 export default function TournamentPage() {
     const [inputValue, setInputValue] = useState('');
@@ -10,13 +12,13 @@ export default function TournamentPage() {
     return (
         <div className="min-h-screen flex flex-col">
             <div className="bg-yellow-dark flex justify-between py-4 px-5">
-                <Button variant={ButtonVariants.black} content="B" onClick={() => console.log('back')}></Button>
+                <Button className="group" variant={ButtonVariants.black} content=<Arrow className="fill-yellow-dark group-hover:fill-black duration-500" /> onClick={() => console.log('back')}></Button>
                 <Button variant={ButtonVariants.black} content="DARK MODE" onClick={() => console.log('dark mode')}></Button>
             </div>
             <div className="grow flex flex-col justify-between">
                 <div className="bg-black flex items-center p-7 gap-9">
                     <h1 className="text-white text-3xl">Newest Tournament</h1>
-                    <Button variant={ButtonVariants.yellow} content="L" onClick={() => console.log('Link')}></Button>
+                    <Button className="group" variant={ButtonVariants.yellow} content=<Link className="fill-black group-hover:fill-yellow-dark duration-500"/> onClick={() => console.log('Link')}></Button>
                 </div>
                 <div className="p-10 flex flex-col justify-center">
                     <div className="flex justify-between">
