@@ -15,6 +15,7 @@ Model.knex(knexClient);
 app.use(cors());
 app.use(json());
 
+app.get("/", (req, res) => { res.send(200) })
 app.use('/tournaments', tournamentsRouter);
 
 app.listen(port, () => {

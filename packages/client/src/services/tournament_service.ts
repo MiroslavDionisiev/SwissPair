@@ -1,8 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 export async function getAllTournaments() {
-	const port = process.env.PORT || "3000";
+	const port = process.env.PORT;
 	const url = `http://localhost:${port}/tournaments`;
 
 	try {
@@ -18,9 +15,10 @@ export async function getAllTournaments() {
 	}
 }
 
-export async function createTournament(name: string) {
-	const port = process.env.PORT || "3000";
-	const url = `http://localhost:${port}/tournaments`;
+export async function createTournament(tournamentName: string) {
+	const port = process.env.SWISSPAIR_SERVER_PORT;
+	console.log(port)
+	const url = `http://localhost:42069/tournaments`;
 
 	try {
 		const response = await fetch(url, {
@@ -28,7 +26,7 @@ export async function createTournament(name: string) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ name }),
+			body: JSON.stringify({ tournamentName }),
 		});
 
 		if (!response.ok) {
@@ -44,7 +42,7 @@ export async function createTournament(name: string) {
 }
 
 export async function getTournamentById(id: number) {
-	const port = process.env.PORT || "3000";
+	const port = process.env.PORT;
 	const url = `http://localhost:${port}/tournaments/${id}`;
 
 	try {
@@ -62,7 +60,7 @@ export async function getTournamentById(id: number) {
 }
 
 export async function deleteTournamentById(id: number) {
-	const port = process.env.PORT || "3000";
+	const port = process.env.PORT;
 	const url = `http://localhost:${port}/tournaments/${id}`;
 
 	try {
@@ -88,7 +86,7 @@ export async function updateTournament(
 	roundsToPlay: number,
 	status: string
 ) {
-	const port = process.env.PORT || "3000";
+	const port = process.env.PORT;
 	const url = `http://localhost:${port}/tournaments/${id}`;
 
 	try {
