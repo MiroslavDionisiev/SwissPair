@@ -19,7 +19,7 @@ const clip = {
 }
 
 export interface ButtonProps {
-  content: string | ReactNode,
+  content: ReactNode,
   variant: ButtonVariants,
   className?: string,
   onClick: () => void
