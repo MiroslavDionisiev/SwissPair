@@ -36,11 +36,11 @@ export function TextInput({
 }: TextInputProps) {
   const isDisabled = variant === "disabled";
   return (
-    <div className="flex flex-col">
+    <div className={twMerge("flex flex-col gap-2", className)}>
       <label className={twMerge(labelStyles[variant])}>{label}</label>
       <input
         type="text"
-        className={twMerge(inputStyles[variant], defaultStyles, className ?? "")}
+        className={twMerge(inputStyles[variant], defaultStyles )}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
