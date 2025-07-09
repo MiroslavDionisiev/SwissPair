@@ -1,5 +1,7 @@
 import { BaseModel } from "./base";
 import { randomUUID } from 'crypto';
+import { RoundModel } from "./round";
+import { PlayerModel } from "./player";
 
 export enum TournamentStatus {
   pending = 'pending',
@@ -28,6 +30,27 @@ export class TournamentModel extends BaseModel {
         status: { type: 'string', enum: Object.values(TournamentStatus), default: TournamentStatus.pending },
         roundsToPlay: { type: ['integer', 'null'] },
       },
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      rounds: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: RoundModel,
+        join: {
+          from: "tournaments.id",
+          to: "rounds.tournamentId",
+        },
+      },
+      players: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: PlayerModel,
+        join: {
+          from: "tournaments.id",
+          to: "players.tournamentId",
+        },
+      }
     };
   }
 

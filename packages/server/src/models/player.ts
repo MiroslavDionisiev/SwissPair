@@ -1,7 +1,7 @@
 import { BaseModel } from "./base"
 import { TournamentModel } from "./tournament"
 
-export class Player extends BaseModel {
+export class PlayerModel extends BaseModel {
   id!: number;
   tournamentId!: string;
   playerName!: string;
