@@ -15,7 +15,6 @@ export default function ModalComponent({ isOpen, onClose }: ModalProps) {
     const [tournamentName, setTournamentName] = useState("");
 
     const { trigger: onTournamentCreate } = useAsyncAction(async () => {
-        console.log("")
         const data = await createTournament(tournamentName);
         console.log(data)
     });
