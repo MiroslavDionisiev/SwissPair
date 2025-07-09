@@ -23,7 +23,7 @@ export default function TournamentPage() {
                 <div className="p-10 flex flex-col justify-center">
                     <div className="flex items-end gap-2">
                         <TextInput className="w-[50%]" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Enter or paste players" variant="light" label="Enter Players"></TextInput>
-                        <Button className="h-[100%]" variant={ButtonVariants.yellow} content="+" onClick={() => console.log('+')}></Button>
+                        <Button className="h-[100%]" variant={ButtonVariants.black} content="+" onClick={() => console.log('+')}></Button>
                     </div>
                     <div className="flex flex-wrap justify-between my-5 gap-5">
                         <NewPlayerCard onEdit={()=>console.log('edit')} onDelete={()=>console.log('delete')} playerName="Player Name"></NewPlayerCard>
