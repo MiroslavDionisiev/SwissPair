@@ -20,8 +20,8 @@ export class SwissPlayer implements PlayerInterface {
   ) {
     this.id = id
     this.score = score
-    this.pairedUpDown = pairedUpDown;
-    this.receivedBye = receivedBye;
+    this.pairedUpDown = pairedUpDown ?? false;
+    this.receivedBye = receivedBye ?? false;
     this.avoid = avoid;
   }
 }
@@ -38,26 +38,20 @@ function getPlayerScores(rounds: RoundModel[], currentRoundNumber: number): Swis
     const result = round.roundResult;
 
 
-    if (result == null) {
+    if (!result) {
       return [];
     }
 
-    let skip = false
     if (!scores.has(whiteId)) {
-      if (whiteId == 0) {
-        skip = true
-      } else if (!skip) {
-        scores.set(whiteId, null as unknown as SwissPlayer);
+      if (!whiteId) {
+        scores.set(whiteId, new SwissPlayer(whiteId, 0));
         avoidMap.set(whiteId, new Set());
       }
     }
 
-    skip = false
     if (!scores.has(blackId)) {
-      if (whiteId == 0) {
-        skip = true
-      } else if (!skip) {
-        scores.set(blackId, null as unknown as SwissPlayer);
+      if (!blackId) {
+        scores.set(blackId, new SwissPlayer(blackId, 0));
         avoidMap.set(blackId, new Set());
       }
     }
@@ -66,9 +60,9 @@ function getPlayerScores(rounds: RoundModel[], currentRoundNumber: number): Swis
     const blackPlayer = scores.get(blackId)!;
 
     if (round.roundNumber == currentRoundNumber) {
-      if (whitePlayer == null) {
+      if (whitePlayer === undefined) {
         blackPlayer.receivedBye = true
-      } else if (blackPlayer == null) {
+      } else if (blackPlayer === undefined) {
         whitePlayer.receivedBye = true
       }
 
