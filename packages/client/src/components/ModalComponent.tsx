@@ -4,36 +4,40 @@ import Button, { ButtonVariants } from './Button';
 import { TextInput } from './TextInput';
 
 export interface ModalProps {
-    modalName?: string,
+    isOpen: boolean,
+    onClose: () => void,
+    onSubmit?: (tournamentName: string) => void;
 }
 
-export default function ModalComponent({ modalName }: ModalProps) {
+export default function ModalComponent({ isOpen, onClose, onSubmit }: ModalProps) {
 
-    const [isOpen, setIsOpen] = useState(true);
     const [tournamentName, setTournamentName] = useState("");
+
+    function handleSubmit(){
+        if(onSubmit) onSubmit(tournamentName);
+        onClose();
+    }
+
     return (
-        <div>
-            <Button variant={ButtonVariants.yellow} onClick={() => setIsOpen(true)} content={modalName ? modalName : ""}></Button>
             <Modal
                 isOpen={isOpen}
                 className='inline-flex flex-col min-w-[560px] items-center justify-self-center outline-none'>
                 <div className='bg-black text-white flex justify-between text-xl px-4 w-[100%] items-center'>
-                    <h2 className='font-bold uppercase'>{modalName}</h2>
-                    <Button content='X' variant={ButtonVariants.black} onClick={() => { setIsOpen(false) }} />
+                    <h2 className='font-bold uppercase'>Create Tournament</h2>
+                    <Button content='X' variant={ButtonVariants.black} onClick={() => { onClose() }} />
                 </div>
                 <div className='w-[100%] py-5 px-10'>
                     <div className='w-[100%]'>
-                        <TextInput variant='light' label='TOURNAMENT NAME' placeholder='Enter a tournament name' value={tournamentName} onChange={(e) => { setTournamentName(e.target.value) }}></TextInput>
+                        <TextInput variant='light' label='TOURNAMENT NAME' placeholder='Enter a tournament name' value={tournamentName} onChange={(e) => { setTournamentName(e.target.value) }}/>
                     </div>
                     <div className='flex gap-10 justify-around pt-5'>
-                        <Button className='' content='CANCEL' variant={ButtonVariants.black} onClick={() => { setIsOpen(false) }} />
-                        <Button className='' content='CREATE' variant={ButtonVariants.yellow} onClick={() => { setIsOpen(false) }} />
+                        <Button content='CANCEL' variant={ButtonVariants.black} onClick={() => { onClose() }} />
+                        <Button content='CREATE' variant={ButtonVariants.yellow} onClick={() => { handleSubmit() }} />
                     </div>
                 </div>
 
 
             </Modal>
-        </div>
 
     )
 }
