@@ -3,7 +3,9 @@ import './index.css';
 
 export function App() {
   return (
-   <div>test</div>
+    <div>
+      test
+    </div>
   );
 }
   
