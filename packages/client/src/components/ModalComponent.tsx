@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Modal from 'react-modal'
-import Button, { ButtonVariants } from './Button/Button';
+import Button, { ButtonVariants } from './Button';
 import { TextInput } from './TextInput';
 
 export interface ModalProps {
