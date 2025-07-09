@@ -1,6 +1,7 @@
 import Button, { ButtonVariants } from "../components/Button/Button";
 import { TablesComponent } from "../components/TablesComponent";
 import ModalComponent from "../components/ModalComponent";
+import { useState } from "react";
 
 const tournamentsData = [
   { name: "Plovdiv Chess Open", players: 20, rounds: "1/5", time: "00:00:13" },
@@ -12,16 +13,18 @@ const tournamentsData = [
 ];
 
 export function HomePage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="min-h-screen flex flex-col items-center bg-white relative pb-20">
       <div className="w-full flex justify-center mt-8 mb-24">
-        <div className="italic text-gray-400 text-md" style={{fontSize: '1.1rem'}}>
+        <div className="italic text-gray-400 text-md text-base">
           From the minds of TUES at Astea summer 2025.
         </div>
-      </div>
-      <div className="absolute top-5 right-5 z-10">
+        <div className="absolute top-5 right-5 z-10">
         <Button onClick={() => { console.log('Dark mode toggled'); }} variant={ButtonVariants.black} content="Dark Mode" />
       </div>
+      </div>
+      
 
       <div className="flex flex-col items-center mt-16 mb-8">
         <div className="text-8xl font-bold tracking-wide mb-2 text-center font-mono" style={{letterSpacing: '0.05em'}}>
@@ -30,11 +33,16 @@ export function HomePage() {
         <div className="text-xl text-center mb-8 text-black/80">
           Your simple swiss bracket solution.
         </div>
-        {/* <Button onClick={() => { console.log('Create tournament clicked'); }} variant="buttonStyleYellow" content="Create a tournament" /> */}
-        <ModalComponent modalName="Create a Tournament" />
+        <Button variant={ButtonVariants.yellow} onClick={() => setIsModalOpen(true)} content="Create a Tournament" />
+        <ModalComponent modalName="Create a Tournament" isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
         </div>
 
-      <div className="my-8 text-4xl ">↓</div>
+      <div className="my-8 text-4xl ">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 10V30" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+          <path d="M10 22L20 32L30 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
 
       <div className="w-full flex flex-col items-center mb-16">
         <TablesComponent
