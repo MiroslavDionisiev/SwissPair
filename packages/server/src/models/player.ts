@@ -1,10 +1,10 @@
 import { BaseModel } from "./base"
 import { TournamentModel } from "./tournament"
 
-export class Player extends BaseModel {
+export class PlayerModel extends BaseModel {
   id!: number;
   tournamentId!: string;
-  name!: string;
+  playerName!: string;
 
   static get tableName() {
     return "players";
@@ -13,11 +13,11 @@ export class Player extends BaseModel {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["tournamentId", "name"],
+      required: ["tournamentId", "playerName"],
       properties: {
         id: { type: "integer" },
         tournamentId: { type: "string", format: "uuid" },
-        name: { type: "string" },
+        playerName: { type: "string" },
         created_at: { type: "string", format: "date-time" },
         updated_at: { type: "string", format: "date-time" },
       },
