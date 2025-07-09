@@ -1,5 +1,5 @@
 export async function createPlayer(tournamentId: string, name: string) {
-  const response = await fetch(`/api/tournaments/${tournamentId}/players`, {
+  const response = await fetch(`/tournaments/${tournamentId}/players`, {
     method: "POST",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name }),
@@ -11,7 +11,7 @@ export async function createPlayer(tournamentId: string, name: string) {
 }
 
 export async function editPlayer(tournamentId: string, id: number, name: string) {
-  const response = await fetch(`/api/tournaments/${tournamentId}/players`, {
+  const response = await fetch(`/tournaments/${tournamentId}/players`, {
     method: "PUT",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id, name }),
@@ -23,7 +23,7 @@ export async function editPlayer(tournamentId: string, id: number, name: string)
 }
 
 export async function deletePlayer(tournamentId: string, id: number) {
-  const response = await fetch(`/api/tournaments/${tournamentId}/players`, {
+  const response = await fetch(`/tournaments/${tournamentId}/players`, {
     method: "DELETE",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id }),
