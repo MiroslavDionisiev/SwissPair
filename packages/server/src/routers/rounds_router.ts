@@ -28,7 +28,7 @@ export class SwissPlayer implements PlayerInterface {
 
 export const RoundRouter = express.Router({ mergeParams: true })
 
-function getPlayerScores(rounds: RoundModel[], currentRoundNumber: number): SwissPlayer[] {
+export function getPlayerScores(rounds: RoundModel[], currentRoundNumber: number): SwissPlayer[] {
   const scores: Map<number | string, SwissPlayer> = new Map();
   const avoidMap: Map<string | number, Set<string | number>> = new Map();
 

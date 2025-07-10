@@ -1,9 +1,20 @@
 import express from 'express';
 import { createTournament, getTournaments, getTournament, deleteTournament, updateTournament } from '../services/tournament_service';
-import { TournamentStatus } from '../models/tournament';
+import { TournamentModel, TournamentStatus } from '../models/tournament';
 import z from 'zod';
 import { PlayerRouter } from './player_router';
-import { RoundRouter } from "./rounds_router"
+import { getPlayerScores, RoundRouter } from "./rounds_router"
+import { RoundModel } from '../models/round';
+
+class Player {
+  id: number | string
+  score: number
+
+  constructor(id: number | string, score: number) {
+    this.id = id
+    this.score = score
+  }
+}
 
 const tournamentUpdateSchema = z.object({
   tournamentName: z.string(),
@@ -85,5 +96,50 @@ tournamentsRouter.put('/:id', async (req, res) => {
   }
 })
 
+async function getTournamentResult(req: express.Request, res: express.Response) {
+  const { tournamentId } = req.body.params;
+
+  if (!tournamentId || tournamentId.trim() === "") {
+    res.status(400).json({ error: "Error: incorrectly provided ID of the tournament" });
+    return;
+  }
+
+  try {
+    const rounds = await RoundModel.query().where("tournamentId", tournamentId);
+    const t = await TournamentModel.query().select("roundsToPlay").where("id", tournamentId).first();
+
+    if (!t) {
+      res.status(403).json({ error: "Error: unable to get the maximum rounds in this tournament" });
+      return;
+    }
+
+    const roundsToPlay = t.roundsToPlay;
+
+    const currRound = rounds.length > 0
+      ? Math.max(...rounds.map(r => r.roundNumber))
+      : 0;
+
+    if (currRound !== roundsToPlay) {
+      res.status(400).json({ error: "Error: you can't get the results of a tournament that hasn't already finished" });
+      return;
+    }
+
+    const playerScores = getPlayerScores(rounds, currRound);
+    if (!playerScores || playerScores.length === 0) {
+      res.status(400).json({ error: "Error: unable to compute results from the given rounds" });
+      return;
+    }
+
+    const result = playerScores.map(ps => new Player(ps.id, ps.score));
+
+    res.status(200).json({ result: result });
+
+  } catch (error) {
+    console.error("Error while computing tournament results:", error);
+    res.status(500).json({ error: "Internal server error while computing tournament results" });
+  }
+}
+
+tournamentsRouter.get("/result", getTournamentResult)
 tournamentsRouter.use("/:tournamentId/players", PlayerRouter)
 tournamentsRouter.use("/:tournamentId/rounds", RoundRouter)
