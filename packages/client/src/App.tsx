@@ -28,7 +28,7 @@ export function App() {
   const testUpdateRound = async () => {
     const tournamentId = '1';
     const roundId = 1;
-    const roundResult = 'whiteWon'; 
+    const roundResult = 'whiteWon';
     try {
       const result = await updateRound(tournamentId, roundId, roundResult);
       console.log('Round updated:', result);
@@ -45,4 +45,3 @@ export function App() {
     </div>
   );
 }
-  

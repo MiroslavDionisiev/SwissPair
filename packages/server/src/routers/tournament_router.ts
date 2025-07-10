@@ -3,6 +3,7 @@ import { createTournament, getTournaments, getTournament, deleteTournament, upda
 import { TournamentStatus } from '../models/tournament';
 import z from 'zod';
 import { PlayerRouter } from './player_router';
+import { RoundRouter } from "./rounds_router"
 
 const tournamentUpdateSchema = z.object({
   tournamentName: z.string(),
@@ -85,3 +86,4 @@ tournamentsRouter.put('/:id', async (req, res) => {
 })
 
 tournamentsRouter.use("/:tournamentId/players", PlayerRouter)
+tournamentsRouter.use("/:tournamentId/rounds", RoundRouter)
