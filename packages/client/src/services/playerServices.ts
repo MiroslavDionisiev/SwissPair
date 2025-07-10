@@ -1,35 +1,36 @@
 export async function createPlayer(tournamentId: string, name: string) {
-  const response = await fetch(`/tournaments/${tournamentId}/players`, {
+  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT
+  const url = `http://localhost:${port}/tournaments/${tournamentId}/players`
+
+  const response = await fetch(url, {
     method: "POST",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name }),
   });
-  if (!response.ok) {
-    throw new Error('Failed to create player');
-  }
   return response.json();
 }
 
 export async function editPlayer(tournamentId: string, id: number, name: string) {
-  const response = await fetch(`/tournaments/${tournamentId}/players`, {
+  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT
+  const url = `http://localhost:${port}/tournaments/${tournamentId}/players`
+
+  const response = await fetch(url, {
     method: "PUT",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id, name }),
   });
-  if (!response.ok) {
-    throw new Error('Failed to edit player');
-  }
   return response.json();
 }
 
 export async function deletePlayer(tournamentId: string, id: number) {
-  const response = await fetch(`/tournaments/${tournamentId}/players`, {
+  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT
+  const url = `http://localhost:${port}/tournaments/${tournamentId}/players`
+
+  const response = await fetch(url, {
     method: "DELETE",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id }),
   });
-  if (!response.ok) {
-    throw new Error('Failed to delete player');
-  }
+
   return response.json();
 }   
