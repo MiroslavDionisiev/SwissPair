@@ -1,6 +1,6 @@
 export async function getAllTournaments() {
-	const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
-	const url = `http://localhost:${port}/tournaments`;
+	const port = process.env.REACT_APP_SERVER_URL;
+	const url = `${port}/tournaments`;
 
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -11,9 +11,9 @@ export async function getAllTournaments() {
 }
 
 export async function createTournament(tournamentName: string) {
-	const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
+	const port = process.env.REACT_APP_SERVER_URL;
 	console.log(port)
-	const url = `http://localhost:${port}/tournaments`;
+	const url = `${port}/tournaments`;
 
 	const response = await fetch(url, {
 		method: "POST",
@@ -32,8 +32,8 @@ export async function createTournament(tournamentName: string) {
 }
 
 export async function getTournamentById(id: number) {
-	const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
-	const url = `http://localhost:${port}/tournaments/${id}`;
+	const port = process.env.REACT_APP_SERVER_URL;
+	const url = `${port}/tournaments/${id}`;
 
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -45,8 +45,8 @@ export async function getTournamentById(id: number) {
 }
 
 export async function deleteTournamentById(id: number) {
-	const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
-	const url = `http://localhost:${port}/tournaments/${id}`;
+	const port = process.env.REACT_APP_SERVER_URL;
+	const url = `${port}/tournaments/${id}`;
 
 	const response = await fetch(url, {
 		method: "DELETE",
@@ -66,8 +66,8 @@ export async function updateTournament(
 	roundsToPlay: number,
 	status: string
 ) {
-	const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
-	const url = `http://localhost:${port}/tournaments/${id}`;
+	const port = process.env.REACT_APP_SERVER_URL;
+	const url = `${port}/tournaments/${id}`;
 
 	const response = await fetch(url, {
 		method: "PUT",
