@@ -26,7 +26,7 @@ export class SwissPlayer implements PlayerInterface {
   }
 }
 
-export const RoundRouter = express.Router()
+export const RoundRouter = express.Router({ mergeParams: true })
 
 function getPlayerScores(rounds: RoundModel[], currentRoundNumber: number): SwissPlayer[] {
   const scores: Map<number | string, SwissPlayer> = new Map();
@@ -194,7 +194,7 @@ async function createRounds(req: express.Request, res: express.Response) {
 
 }
 
-RoundRouter.get("/:tournamentId/rounds", getAllRounds)
-RoundRouter.get("/:tournamentId/rounds/:roundId", getRoundById)
-RoundRouter.put("/:tournamentId/rounds/:round_id", updateRound)
-RoundRouter.post("/:tournamentId/rounds", createRounds)
+RoundRouter.get("/", getAllRounds)
+RoundRouter.get("/:roundId", getRoundById)
+RoundRouter.put("/:roundId", updateRound)
+RoundRouter.post("/", createRounds)
