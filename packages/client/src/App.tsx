@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import './app.module.css';
+import ModalComponent from './components/ModalComponent';
 import './index.css';
 import TournamentPage from './pages/TournamentPage';
 import NewTournament from './pages/NewTournament';
@@ -7,6 +8,7 @@ import TournamentResults from './pages/TournamentResults';
 import { HomePage } from './pages/HomePage';
 
 export function App() {
+  const [isOpen, setIsOpen] = useState(true)
   return (
     <BrowserRouter>
       <Routes>
