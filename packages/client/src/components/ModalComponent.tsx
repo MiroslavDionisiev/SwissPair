@@ -38,8 +38,8 @@ export default function ModalComponent({ isOpen, onClose }: ModalProps) {
                     <TextInput variant='light' label='TOURNAMENT NAME' placeholder='Enter a tournament name' value={tournamentName} onChange={(e) => { setTournamentName(e.target.value) }} />
                 </div>
                 <div className='flex gap-10 justify-around pt-5'>
-                    <Button content='CANCEL' variant={ButtonVariants.black} onClick={() => { onClose() }} />
-                    <Button content='CREATE' variant={ButtonVariants.yellow} onClick={async () => { await onSubmit() }} />
+                    <Button content='CANCEL' variant={ButtonVariants.black} onClick={onClose} />
+                    <Button content='CREATE' variant={ButtonVariants.yellow} onClick={onSubmit} />
                 </div>
             </div>
 
