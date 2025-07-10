@@ -34,7 +34,7 @@ export function HomePage() {
           Your simple swiss bracket solution.
         </div>
         <Button variant={ButtonVariants.yellow} onClick={() => setIsModalOpen(true)} content="Create a Tournament" />
-        <ModalComponent isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        <ModalComponent isOpen={isModalOpen} onClose={() => { }} />
       </div>
 
       <div className="my-8 text-4xl ">
