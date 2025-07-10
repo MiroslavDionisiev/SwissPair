@@ -25,18 +25,6 @@ const tableContent = [
     players: 8,
     rounds: "Round Robin",
     time: "2025-12-20T19:00:00Z"
-  },
-  {
-    name: "Spring Championship",
-    players: 16,
-    rounds: "Single Elimination",
-    time: "2025-08-01T18:00:00Z"
-  },
-  {
-    name: "Summer Invitational",
-    players: 32,
-    rounds: "Double Elimination",
-    time: "2025-08-15T15:30:00Z"
   }
 ];
 
