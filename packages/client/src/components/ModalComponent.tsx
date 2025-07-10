@@ -4,6 +4,7 @@ import { useAsyncAction } from '../hooks/use-async-action';
 import { createTournament } from '../services/tournament_service';
 import Button, { ButtonVariants } from './Button';
 import { TextInput } from './TextInput';
+import { useNavigate } from 'react-router';
 
 export interface ModalProps {
     isOpen: boolean,
@@ -14,9 +15,11 @@ export default function ModalComponent({ isOpen, onClose }: ModalProps) {
 
     const [tournamentName, setTournamentName] = useState("");
 
+    const navigate = useNavigate();
+
     const { trigger: onTournamentCreate } = useAsyncAction(async () => {
         const data = await createTournament(tournamentName);
-        console.log(data)
+        await navigate(`tournament/${data.id}`);
     });
 
     const onSubmit = useCallback(async () => {
