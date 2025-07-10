@@ -17,11 +17,11 @@ export default function NewPlayerCard({ playerName, onDelete }: newPlayerCardPro
         if (inputValue.length == 0) setInputValue(name)
         else setName(inputValue);
         setIsEditing(false);
-    },[inputValue, name, isEditing])
+    },[inputValue, setInputValue, name, setName, isEditing, setIsEditing])
 
     const onEdit = useCallback(()=>{
         alert(name);
-    }, [name])
+    }, [name, setName])
 
     return (
         <div className="inline-flex justify-between min-w-[500px] items-center border-black border-[1px] py-4 px-4 gap-5">
