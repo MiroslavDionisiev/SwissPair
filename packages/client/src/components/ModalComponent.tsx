@@ -27,7 +27,7 @@ export default function ModalComponent({ isOpen, onClose }: ModalProps) {
     return (
         <Modal
             isOpen={isOpen}
-            className='inline-flex flex-col min-w-[560px] items-center justify-self-center outline-none'
+            className='inline-flex flex-col min-w-[560px] items-center justify-self-center outline-none bg-white'
             overlayClassName="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60">
             <div className='bg-black text-white flex justify-between text-xl px-4 w-[100%] items-center'>
                 <h2 className='font-bold uppercase'>Create Tournament</h2>
