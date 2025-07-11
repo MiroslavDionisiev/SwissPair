@@ -8,8 +8,8 @@ enum GameResult{
 }
 
 export function ChessGame(props: {whiteName: string, blackName: string, saveResult: (result: string) => void}){
-    const[whitePlayerBg, setWhitePlayerBg] = useState('bg-white');
-    const[blackPlayerBg, setBlackPlayerBg] = useState('bg-white');
+    const[whitePlayerBg, setWhitePlayerBg] = useState(props.whiteName === "NO PLAYER AVAILABLE"? "bg-yellow-light": "bg-white");
+    const[blackPlayerBg, setBlackPlayerBg] = useState(props.blackName === "NO PLAYER AVAILABLE"? "bg-yellow-light": "bg-white");
     const[pointsWhite, setPointsWhite] = useState<string | null>(null);
     const[pointsBlack, setPointsBlack] = useState<string | null>(null);
     const[result, setResult] = useState(-1);
@@ -40,7 +40,11 @@ export function ChessGame(props: {whiteName: string, blackName: string, saveResu
             <PlayerField playerName={props.whiteName} white={true} bgColor={whitePlayerBg} gameResult={pointsWhite}/>
 
             <button 
-                onClick={() => {props.saveResult(String(calculateResult()))}}
+                onClick={() => {
+                        if((props.whiteName != "NO PLAYER AVAILABLE") && (props.blackName != "NO PLAYER AVAILABLE"))
+                            props.saveResult(String(calculateResult()))
+                    }
+                }
                 className="w-[40px] h-[40px] top-[16px] left-[352px]"
                 >
                     <img src="/playbutton.svg" alt="Play" />
