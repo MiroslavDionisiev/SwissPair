@@ -1,34 +1,24 @@
+import { useEffect, useState } from "react";
 import Button, { ButtonVariants } from "../components/Button";
 import { TablesComponent } from "../components/TablesComponent";
-
-const tableContent = [
-  {
-    name: "Spring Championship",
-    players: 16,
-    rounds: "Single Elimination",
-    time: "2025-08-01T18:00:00Z"
-  },
-  {
-    name: "Summer Invitational",
-    players: 32,
-    rounds: "Double Elimination",
-    time: "2025-08-15T15:30:00Z"
-  },
-  {
-    name: "Autumn Open",
-    players: 24,
-    rounds: "Swiss",
-    time: "2025-09-05T13:00:00Z"
-  },
-  {
-    name: "Winter Finals",
-    players: 8,
-    rounds: "Round Robin",
-    time: "2025-12-20T19:00:00Z"
-  }
-];
+import { getAllTournaments } from "../services/tournament_service";
 
 export default function TournamentResults() {
+  const [tableContent, setTableContent] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchResults() {
+        const tournaments = await getAllTournaments();
+        const formatted = tournaments.map((t: any) => ({
+          name: t.tournamentName || t.name,
+          players: t.players ? t.players.length : '-',
+          rounds: t.roundsToPlay ? t.roundsToPlay : '-',
+          time: t.time || '-',
+        }));
+        setTableContent(formatted);
+    }
+    void fetchResults();
+  }, []);
 
   return (
     <div className="flex grow flex-col justify-between">
