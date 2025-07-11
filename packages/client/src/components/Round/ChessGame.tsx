@@ -2,17 +2,17 @@ import { PlayerField } from "./PlayerField"
 import { useCallback, useState } from "react"
 
 enum GameResult{
-    whiteWon = -1, 
-    draw = 0, 
-    blackWon = 1
+    whiteWon = "whiteWon", 
+    draw = "draw", 
+    blackWon = "blackWon"
 }
 
 export function ChessGame(props: {whiteName: string, blackName: string, saveResult: (result: string) => void}){
-    const[whitePlayerBg, setWhitePlayerBg] = useState(props.whiteName === "NO PLAYER AVAILABLE"? "bg-yellow-light": "bg-white");
-    const[blackPlayerBg, setBlackPlayerBg] = useState(props.blackName === "NO PLAYER AVAILABLE"? "bg-yellow-light": "bg-white");
-    const[pointsWhite, setPointsWhite] = useState<string | null>(null);
-    const[pointsBlack, setPointsBlack] = useState<string | null>(null);
-    const[result, setResult] = useState(-1);
+    const [whitePlayerBg, setWhitePlayerBg] = useState(props.whiteName === "NO PLAYER AVAILABLE"? "bg-yellow-light": "bg-white");
+    const [blackPlayerBg, setBlackPlayerBg] = useState(props.blackName === "NO PLAYER AVAILABLE"? "bg-yellow-light": "bg-white");
+    const [pointsWhite, setPointsWhite] = useState<string | null>(null);
+    const [pointsBlack, setPointsBlack] = useState<string | null>(null);
+    const [result, setResult] = useState<string>("whiteWon");
     
     const calculateResult = useCallback(() => {
         if (result === GameResult.whiteWon) {
@@ -31,8 +31,7 @@ export function ChessGame(props: {whiteName: string, blackName: string, saveResu
             setBlackPlayerBg("bg-green-custom");
             setPointsBlack("1");
         }
-        setResult(result === 1 ? -1 : result + 1);
-        return result;
+        setResult(result === "blackWon" ? "whiteWon" : result === "draw"? "blackWon" : "draw"); 
     }, [result, setWhitePlayerBg, setBlackPlayerBg, setPointsWhite, setPointsBlack, setResult]);
 
     return (
@@ -41,8 +40,10 @@ export function ChessGame(props: {whiteName: string, blackName: string, saveResu
 
             <button 
                 onClick={() => {
-                        if((props.whiteName != "NO PLAYER AVAILABLE") && (props.blackName != "NO PLAYER AVAILABLE"))
-                            props.saveResult(String(calculateResult()))
+                        if((props.whiteName != "NO PLAYER AVAILABLE") && (props.blackName != "NO PLAYER AVAILABLE")){
+                            calculateResult();
+                            props.saveResult(result);
+                        }
                     }
                 }
                 className="w-[40px] h-[40px] top-[16px] left-[352px]"
