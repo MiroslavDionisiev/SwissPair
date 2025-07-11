@@ -10,6 +10,18 @@ export async function getAllTournaments() {
 	return data;
 }
 
+export async function getAllTournamentsByStatus(status: string) {
+	const port = process.env.REACT_APP_SERVER_URL;
+	const url = `${port}/tournaments?status=${status}`;
+
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch tournaments: ${response.status}, ${response.statusText}`);
+	}
+	const data = await response.json();
+	return data;
+}
+
 export async function createTournament(tournamentName: string) {
 	const port = process.env.REACT_APP_SERVER_URL;
 	console.log(port)
