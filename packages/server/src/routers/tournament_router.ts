@@ -132,6 +132,8 @@ async function getTournamentResult(req: express.Request, res: express.Response) 
 
     const result = playerScores.map(ps => new Player(ps.id, ps.score));
 
+    result.sort((a, b) => b.score - a.score);
+
     res.status(200).json({ result: result });
 
   } catch (error) {
