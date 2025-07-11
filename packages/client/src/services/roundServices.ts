@@ -1,6 +1,6 @@
 export async function createRound(tournamentId: string) {
-  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
-  const url = `http://localhost:${port}/tournaments/${tournamentId}/rounds`;
+  const port = process.env.REACT_APP_SERVER_URL;
+  const url = `${port}/tournaments/${tournamentId}/rounds`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -11,8 +11,8 @@ export async function createRound(tournamentId: string) {
 }
 
 export async function updateRound(tournamentId: string, roundId: number, roundResult: string) {
-  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT;
-  const url = `http://localhost:${port}/tournaments/${tournamentId}/rounds/${roundId}`;
+  const port = process.env.REACT_APP_SERVER_URL;
+  const url = `${port}/tournaments/${tournamentId}/rounds/${roundId}`;
 
   const response = await fetch(url, {
     method: "PUT",
