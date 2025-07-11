@@ -100,3 +100,15 @@ export async function updateTournament(
 	const data = await response.json();
 	return data;
 }
+
+export async function getTournamentResult(tournamentId: string) {
+	const port = process.env.REACT_APP_SERVER_URL;
+	const url = `${port}/tournaments/${tournamentId}/result`;
+
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch tournaments: ${response.status}, ${response.statusText}`);
+	}
+	const data = await response.json();
+	return data;
+}
