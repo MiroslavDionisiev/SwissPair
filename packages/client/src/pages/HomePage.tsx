@@ -46,7 +46,7 @@ export function HomePage() {
 
       <div className="w-full flex flex-col items-center mb-16">
         <TablesComponent
-          tournaments={tournamentsData}
+          content={tournamentsData}
           tableName="ACTIVE TOURNAMENTS"
           variant="default"
           className="mb-12"
@@ -55,7 +55,7 @@ export function HomePage() {
 
       <div className="w-full flex flex-col items-center">
         <TablesComponent
-          tournaments={tournamentsData}
+          content={tournamentsData}
           tableName="PAST TOURNAMENTS"
           variant="default"
         />
