@@ -44,8 +44,8 @@ export default function ModalComponent({ isOpen, onClose }: ModalProps) {
                 <div className='flex gap-10 justify-around pt-5'>
                     <Button content='CANCEL' variant={ButtonVariants.black} onClick={onClose} />
                     <Button content='CREATE' variant={ButtonVariants.yellow} onClick={onSubmit} />
-                </div >
-            </div >
+                </div>
+            </div>
 
 
         </Modal >
