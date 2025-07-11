@@ -20,7 +20,7 @@ const playerDeleteSchema = z.object({
   id: z.number().min(1, { message: "Name is required" }),
 });
 
-export const PlayerRouter = express.Router()
+export const PlayerRouter = express.Router({ mergeParams: true })
 
 async function getPlayers(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
