@@ -33,7 +33,7 @@ export default function TournamentResults() {
   return (
     <div className="flex grow flex-col justify-between">
       <div className="p-10 flex grow flex-col justify-center">
-        <TablesComponent tournaments={tableContent} tableName="FINAL RESULT" />
+        <TablesComponent content={tableContent} tableName="FINAL RESULT" />
       </div>
       <div className="bg-black flex justify-center p-7">
         <Button variant={ButtonVariants.yellow} content="CREATE NEW TOURNAMENT" onClick={() => console.log('CREATE NEW TOURNAMENT')}></Button>
