@@ -1,4 +1,4 @@
-import Button, { ButtonVariants } from "../components/Button/Button";
+import Button, { ButtonVariants } from "../components/Button";
 import { TablesComponent } from "../components/TablesComponent";
 import ModalComponent from "../components/ModalComponent";
 import { useState } from "react";
@@ -27,14 +27,14 @@ export function HomePage() {
       
 
       <div className="flex flex-col items-center mt-16 mb-8">
-        <div className="text-8xl font-bold tracking-wide mb-2 text-center font-mono" style={{letterSpacing: '0.05em'}}>
+        <div className="text-8xl font-bold tracking-wide mb-2 text-center" style={{letterSpacing: '0.05em'}}>
           SWISS CHESS
         </div>
         <div className="text-xl text-center mb-8 text-black/80">
           Your simple swiss bracket solution.
         </div>
         <Button variant={ButtonVariants.yellow} onClick={() => setIsModalOpen(true)} content="Create a Tournament" />
-        <ModalComponent modalName="Create a Tournament" isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        <ModalComponent isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)} />
         </div>
 
       <div className="my-8 text-4xl ">
