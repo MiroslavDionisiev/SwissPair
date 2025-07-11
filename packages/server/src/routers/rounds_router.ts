@@ -1,8 +1,9 @@
-import express from "express"
+import express, { RequestHandler } from "express"
 import { RoundModel, RoundStatus } from "../models/round"
 import { Swiss } from "tournament-pairings"
 import { Player as PlayerInterface } from "tournament-pairings/dist/interfaces"
 import { TournamentModel } from "../models/tournament"
+import { PlayerModel } from "../models/player"
 
 export class SwissPlayer implements PlayerInterface {
   id!: string | number
@@ -22,7 +23,7 @@ export class SwissPlayer implements PlayerInterface {
     this.score = score
     this.pairedUpDown = pairedUpDown ?? false;
     this.receivedBye = receivedBye ?? false;
-    this.avoid = avoid;
+    this.avoid = avoid ?? new Array<string | number>;
   }
 }
 
@@ -149,30 +150,48 @@ async function createRounds(req: express.Request, res: express.Response) {
       .where("id", tournamentId)
       .first()
 
+    if (!t) {
+      return res.status(404).json({ error: "Tournament not found" });
+    }
+
     const currentRoundNumber = rounds.length > 0
       ? Math.max(...rounds.map(r => r.roundNumber))
       : 0;
 
-    if (currentRoundNumber == 0) {
+    if (currentRoundNumber == 0 && rounds.length != 0) {
       res.status(400).json({ error: "Error unable to get the round number" })
       return
     }
 
-    if (t?.roundsToPlay == currentRoundNumber) {
+    if (t.roundsToPlay == currentRoundNumber) {
       res.status(403).json({ error: "Error no more rounds to be played" })
       return
     }
 
     const nextRoundNumber = currentRoundNumber + 1
 
-    const players = getPlayerScores(rounds, currentRoundNumber)
-    if (!players || players.length === 0) {
-      res.send(400).json({ error: "Error unable to create new rounds while the old ones are still running" })
-      return
+    const swissPlayers: SwissPlayer[] = []
+
+    if (rounds.length === 0) {
+      console.log("Only for the first round")
+      const players = await PlayerModel.query().where("tournamentId", tournamentId)
+      for (const player of players) {
+        swissPlayers.push(new SwissPlayer(player.id, 0))
+      }
+    } else {
+      console.log("For the rest of the rounds")
+      const players = getPlayerScores(rounds, currentRoundNumber)
+      if (!players || players.length === 0) {
+        res.send(400).json({ error: "Error unable to create new rounds while the old ones are still running" })
+        return
+      }
+
+      swissPlayers.push(...players)
     }
 
+    console.log(swissPlayers)
 
-    const newRounds = Swiss(players, nextRoundNumber)
+    const newRounds = Swiss(swissPlayers, nextRoundNumber)
 
     const result = await Promise.all(
       newRounds.map(match =>
@@ -197,4 +216,4 @@ async function createRounds(req: express.Request, res: express.Response) {
 RoundRouter.get("/", getAllRounds)
 RoundRouter.get("/:roundId", getRoundById)
 RoundRouter.put("/:roundId", updateRound)
-RoundRouter.post("/", createRounds)
+RoundRouter.post("/", createRounds as RequestHandler)

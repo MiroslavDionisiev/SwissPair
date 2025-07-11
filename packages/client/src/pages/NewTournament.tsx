@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 export default function NewTournament() {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
+  const [roundsInputValue, setRoundsInputValue] = useState('0');
 
   function onDelete(){
     alert('delete');
@@ -29,6 +30,7 @@ export default function NewTournament() {
           <TextInput className="w-[50%]" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Enter or paste players" variant="light" label="Enter Players"/>
           <Button className="h-[100%]" variant={ButtonVariants.black} content="+" onClick={addPlayer}/>
         </div>
+        <TextInput className="pt-5 w-[10%]" value={roundsInputValue} onChange={(e) => setRoundsInputValue(e.target.value)} variant="light" label="Rounds"/>
         <div className="flex flex-wrap justify-between my-5 gap-5">
           <NewPlayerCard onDelete={onDelete} playerName="Player Name"/>
         </div>

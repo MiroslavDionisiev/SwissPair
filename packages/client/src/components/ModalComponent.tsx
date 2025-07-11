@@ -48,7 +48,7 @@ export default function ModalComponent({ isOpen, onClose }: ModalProps) {
             </div>
 
 
-        </Modal>
+        </Modal >
 
     )
 }
