@@ -10,11 +10,11 @@ export function HomePage() {
 
   const { data: activeData, loading: activeLoading, error: activeError } = useAsync(() =>
     getAllTournamentsByStatus('active')
-    , [])
+    , []);
 
   const { data: pastData, loading: pastLoading, error: pastError } = useAsync(() =>
     getAllTournamentsByStatus('completed')
-    , [])
+    , []);
 
   const tournaments = useMemo(() => {
     const activeTournaments = !activeLoading && !activeError ? activeData.map((t: any) => ({

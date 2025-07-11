@@ -17,8 +17,9 @@ export async function createTournament(tournamentName: string) {
 
 export async function getTournaments(tournamentsStatus: string | undefined) {
   if (tournamentsStatus != undefined) {
-    const tournaments = await TournamentModel.query().
-      where("status", '=', tournamentsStatus);
+    const tournaments = await TournamentModel.query()
+      .where("status", '=', tournamentsStatus)
+      .withGraphJoined('players');
 
     return tournaments;
   } else {
