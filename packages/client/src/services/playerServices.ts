@@ -1,6 +1,6 @@
 export async function createPlayer(tournamentId: string, name: string) {
-  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT
-  const url = `http://localhost:${port}/tournaments/${tournamentId}/players`
+  const port = process.env.REACT_APP_SERVER_URL;
+  const url = `${port}/tournaments/${tournamentId}/players`
 
   const response = await fetch(url, {
     method: "POST",
@@ -11,8 +11,8 @@ export async function createPlayer(tournamentId: string, name: string) {
 }
 
 export async function editPlayer(tournamentId: string, id: number, name: string) {
-  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT
-  const url = `http://localhost:${port}/tournaments/${tournamentId}/players`
+  const port = process.env.REACT_APP_SERVER_URL;
+  const url = `${port}/tournaments/${tournamentId}/players`
 
   const response = await fetch(url, {
     method: "PUT",
@@ -23,8 +23,8 @@ export async function editPlayer(tournamentId: string, id: number, name: string)
 }
 
 export async function deletePlayer(tournamentId: string, id: number) {
-  const port = process.env.REACT_APP_SWISSPAIR_SERVER_PORT
-  const url = `http://localhost:${port}/tournaments/${tournamentId}/players`
+  const port = process.env.REACT_APP_SERVER_URL;
+  const url = `${port}/tournaments/${tournamentId}/players`
 
   const response = await fetch(url, {
     method: "DELETE",
