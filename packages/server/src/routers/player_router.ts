@@ -20,7 +20,7 @@ const playerDeleteSchema = z.object({
   id: z.number().min(1, { message: "Name is required" }),
 });
 
-export const PlayerRouter = express.Router()
+export const PlayerRouter = express.Router({ mergeParams: true })
 
 async function getPlayers(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
@@ -131,16 +131,16 @@ async function createPlayers(req: express.Request, res: express.Response) {
   const names = parseResult.data.names;
 
   try {
-    const insertedPlayers = await PlayerModel.transaction(async (trx) => {
-      return Promise.all(
+    const insertedPlayers = await PlayerModel.transaction(async (trx) =>
+      Promise.all(
         names.map(name =>
           PlayerModel.query(trx).insert({
             tournamentId,
             playerName: name,
           })
         )
-      );
-    });
+      )
+    );
 
     res.status(200).json({ players: insertedPlayers })
   } catch (error) {
