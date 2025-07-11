@@ -43,7 +43,7 @@ export async function createTournament(tournamentName: string) {
 	return data;
 }
 
-export async function getTournamentById(id: number) {
+export async function getTournamentById(id: string) {
 	const port = process.env.REACT_APP_SERVER_URL;
 	const url = `${port}/tournaments/${id}`;
 
@@ -56,7 +56,7 @@ export async function getTournamentById(id: number) {
 	return data;
 }
 
-export async function deleteTournamentById(id: number) {
+export async function deleteTournamentById(id: string) {
 	const port = process.env.REACT_APP_SERVER_URL;
 	const url = `${port}/tournaments/${id}`;
 
@@ -73,7 +73,7 @@ export async function deleteTournamentById(id: number) {
 }
 
 export async function updateTournament(
-	id: number,
+	id: string,
 	tournamentName: string,
 	roundsToPlay: number,
 	status: string
