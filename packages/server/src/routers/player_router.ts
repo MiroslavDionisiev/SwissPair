@@ -53,7 +53,7 @@ async function createPlayer(req: express.Request, res: express.Response) {
         playerName: name,
       })
 
-    res.sendStatus(200).json({ player: player })
+    res.status(200).json({ player: player })
   } catch (error) {
     console.log(error)
     res.status(500).json({ "error": "Error unable to save the player to the database" })
@@ -80,12 +80,12 @@ async function updatePlayer(req: express.Request, res: express.Response) {
       return res.status(400).json({ "error": "Error can't update players while the tournament is active or finished" });
     }
 
-    await PlayerModel.query()
+    const player = await PlayerModel.query()
       .patch({ playerName: name })
       .where("tournamentId", tournamentId)
       .andWhere("id", id)
 
-    res.sendStatus(200);
+    res.status(200).json({ player: player });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to update players" });
@@ -112,7 +112,7 @@ async function deletePlayer(req: express.Request, res: express.Response) {
       return res.status(404).json({ "error": "Error there is no player with that id for this tournament" });
     }
 
-    res.sendStatus(200);
+    res.status(200).json({ "deleted": numDeleted });
   } catch (error) {
     console.error(error);
     res.status(500).json({ "error": "Failed to delete the player" });
