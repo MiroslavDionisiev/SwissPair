@@ -131,16 +131,16 @@ async function createPlayers(req: express.Request, res: express.Response) {
   const names = parseResult.data.names;
 
   try {
-    const insertedPlayers = await PlayerModel.transaction(async (trx) => {
-      return Promise.all(
+    const insertedPlayers = await PlayerModel.transaction(async (trx) =>
+      Promise.all(
         names.map(name =>
           PlayerModel.query(trx).insert({
             tournamentId,
             playerName: name,
           })
         )
-      );
-    });
+      )
+    );
 
     res.status(200).json({ players: insertedPlayers })
   } catch (error) {
