@@ -151,6 +151,6 @@ async function getTournamentResult(req: express.Request, res: express.Response) 
   }
 }
 
-tournamentsRouter.get("/result", getTournamentResult)
+tournamentsRouter.get("/:tournamentId/result", getTournamentResult)
 tournamentsRouter.use("/:tournamentId/players", PlayerRouter)
 tournamentsRouter.use("/:tournamentId/rounds", RoundRouter)
