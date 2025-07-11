@@ -12,7 +12,7 @@ export class RoundModel extends BaseModel {
     static tableName = 'rounds';
 
     id!: number;
-    tournamentId!: number;
+    tournamentId!: string;
     roundNumber!: number;
     playerWhiteId!: number;
     playerBlackId!: number;
@@ -25,10 +25,10 @@ export class RoundModel extends BaseModel {
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['id', 'tournamentId', 'roundNumber', 'playerWhiteId', 'playerBlackId'],
+            required: ['tournamentId', 'roundNumber', 'playerWhiteId', 'playerBlackId'],
             properties: {
                 id: { type: 'integer' },
-                tournamentId: { type: 'integer' },
+                tournamentId: { type: 'string', format: 'uuid' },
                 roundNumber: { type: 'integer' },
                 playerWhiteId: { type: 'integer' },
                 playerBlackId: { type: 'integer' },

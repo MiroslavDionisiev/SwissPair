@@ -8,34 +8,34 @@ import { useAsync } from "../hooks/use-async";
 export function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data:activeData, loading:activeLoading, error:activeError } = useAsync(() =>
+  const { data: activeData, loading: activeLoading, error: activeError } = useAsync(() =>
     getAllTournamentsByStatus('active')
     , [])
 
-  const { data:pastData, loading:pastLoading, error:pastError } = useAsync(() =>
+  const { data: pastData, loading: pastLoading, error: pastError } = useAsync(() =>
     getAllTournamentsByStatus('completed')
     , [])
 
   const tournaments = useMemo(() => {
     const activeTournaments = !activeLoading && !activeError ? activeData.map((t: any) => ({
-        name: t.tournamentName,
-        players: t.players ? t.players.length : '-',
-        rounds: t.roundsToPlay ? `0/${t.roundsToPlay}` : '-',
-        time: '-',
-      })) : [];
+      name: t.tournamentName,
+      players: t.players ? t.players.length : '-',
+      rounds: t.roundsToPlay ? `0/${t.roundsToPlay}` : '-',
+      time: '-',
+    })) : [];
 
-      const pastTournaments = !pastLoading && !pastError ? pastData.map((t: any) => ({
-        name: t.tournamentName,
-        players: t.players ? t.players.length : '-',
-        rounds: t.roundsToPlay ? `0/${t.roundsToPlay}` : '-',
-        time: '-',
-      })) : [];
+    const pastTournaments = !pastLoading && !pastError ? pastData.map((t: any) => ({
+      name: t.tournamentName,
+      players: t.players ? t.players.length : '-',
+      rounds: t.roundsToPlay ? `0/${t.roundsToPlay}` : '-',
+      time: '-',
+    })) : [];
 
-      return {
-        activeTournaments: activeTournaments,
-        pastTournaments: pastTournaments
-      };
-    
+    return {
+      activeTournaments: activeTournaments,
+      pastTournaments: pastTournaments
+    };
+
   }, [activeData, activeLoading, activeError])
 
   return (
