@@ -5,6 +5,7 @@ import z from 'zod';
 import { PlayerRouter } from './player_router';
 import { getPlayerScores, RoundRouter } from "./rounds_router"
 import { RoundModel } from '../models/round';
+import { PlayerModel } from '../models/player';
 
 class Player {
   id: number | string
@@ -88,6 +89,13 @@ tournamentsRouter.put('/:id', async (req, res) => {
   }
   const { tournamentName, status, roundsToPlay } = parsed.data;
 
+  const playerNumber = await PlayerModel.query().where("tournamentId", id).resultSize()
+
+  if (playerNumber < roundsToPlay) {
+    res.status(403).json({ error: "Error there aren't enough players for the given rounds to play in the tournament" })
+    return
+  }
+
   try {
     const newTournament = await updateTournament(id, { tournamentName, status, roundsToPlay });
     res.status(201).json(newTournament);
@@ -105,18 +113,19 @@ async function getTournamentResult(req: express.Request, res: express.Response) 
   }
 
   try {
-    const rounds = await RoundModel.query().where("tournamentId", tournamentId);
-    const t = await TournamentModel.query().select("roundsToPlay").where("id", tournamentId).first();
+    const t = await TournamentModel.query().findById(tournamentId)
+      .withGraphJoined('rounds')
+      .withGraphJoined('players')
 
     if (!t) {
-      res.status(403).json({ error: "Error: unable to get the maximum rounds in this tournament" });
+      res.status(403).json({ error: "Error: unable to get the tournament" });
       return;
     }
 
     const roundsToPlay = t.roundsToPlay;
 
-    const currRound = rounds.length > 0
-      ? Math.max(...rounds.map(r => r.roundNumber))
+    const currRound = (t.rounds?.length ?? 0) > 0
+      ? Math.max(...t.rounds!.map(r => r.roundNumber))
       : 0;
 
     if (currRound !== roundsToPlay) {
@@ -124,7 +133,7 @@ async function getTournamentResult(req: express.Request, res: express.Response) 
       return;
     }
 
-    const playerScores = getPlayerScores(rounds, currRound);
+    const playerScores = getPlayerScores(t.rounds!, currRound);
     if (!playerScores || playerScores.length === 0) {
       res.status(400).json({ error: "Error: unable to compute results from the given rounds" });
       return;
