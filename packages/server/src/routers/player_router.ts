@@ -1,5 +1,5 @@
 import express, { RequestHandler } from "express"
-import { Player } from "../models/player"
+import { PlayerModel } from "../models/player"
 import { TournamentModel } from "../models/tournament";
 import z from 'zod';
 
@@ -25,7 +25,7 @@ export const PlayerRouter = express.Router()
 async function getPlayers(req: express.Request, res: express.Response) {
   const { tournamentId } = req.params
   try {
-    const players = await Player.query()
+    const players = await PlayerModel.query()
       .where("tournamentId", tournamentId);
 
     res.status(200).json({ players: players })
@@ -47,7 +47,7 @@ async function createPlayer(req: express.Request, res: express.Response) {
   const name = parseResult.data.name;
 
   try {
-    const player = await Player.query()
+    const player = await PlayerModel.query()
       .insert({
         tournamentId: tournamentId,
         playerName: name,
@@ -80,7 +80,7 @@ async function updatePlayer(req: express.Request, res: express.Response) {
       return res.status(400).json({ "error": "Error can't update players while the tournament is active or finished" });
     }
 
-    await Player.query()
+    await PlayerModel.query()
       .patch({ playerName: name })
       .where("tournamentId", tournamentId)
       .andWhere("id", id)
@@ -104,7 +104,7 @@ async function deletePlayer(req: express.Request, res: express.Response) {
   const id = parseResult.data.id;
 
   try {
-    const numDeleted = await Player.query()
+    const numDeleted = await PlayerModel.query()
       .deleteById(id)
       .where("tournamentId", tournamentId)
 
@@ -131,16 +131,16 @@ async function createPlayers(req: express.Request, res: express.Response) {
   const names = parseResult.data.names;
 
   try {
-    const insertedPlayers = await Player.transaction(async (trx) => {
-      return Promise.all(
+    const insertedPlayers = await PlayerModel.transaction(async (trx) => 
+      Promise.all(
         names.map(name =>
-          Player.query(trx).insert({
+          PlayerModel.query(trx).insert({
             tournamentId,
             playerName: name,
           })
         )
-      );
-    });
+      )
+    );
 
     res.status(200).json({ players: insertedPlayers })
   } catch (error) {
