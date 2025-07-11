@@ -38,8 +38,6 @@ export function HomePage() {
 
   }, [activeData, activeLoading, activeError])
 
-  console.log(activeData);
-
   return (
     <div className="min-h-screen flex flex-col items-center bg-white relative pb-20">
       <div className="w-full flex justify-center mt-8 mb-24">

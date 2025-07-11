@@ -105,7 +105,7 @@ tournamentsRouter.put('/:id', async (req, res) => {
 })
 
 async function getTournamentResult(req: express.Request, res: express.Response) {
-  const { tournamentId } = req.body.params;
+  const { tournamentId } = req.params;
 
   if (!tournamentId || tournamentId.trim() === "") {
     res.status(400).json({ error: "Error: incorrectly provided ID of the tournament" });
