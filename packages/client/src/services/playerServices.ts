@@ -33,4 +33,13 @@ export async function deletePlayer(tournamentId: string, id: number) {
   });
 
   return response.json();
-}   
+}
+
+export async function getAllPlayers(tournamentId: string) {
+  const port = process.env.REACT_APP_SERVER_URL;
+  const url = `${port}/tournaments/${tournamentId}/players`
+
+  const response = await fetch(url, {
+  });
+  return response.json();
+}
