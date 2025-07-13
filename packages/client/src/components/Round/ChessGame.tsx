@@ -35,7 +35,7 @@ export function ChessGame(props: {whiteName: string, blackName: string, saveResu
     }, [result, setWhitePlayerBg, setBlackPlayerBg, setPointsWhite, setPointsBlack, setResult]);
 
     return (
-        <div className="flex items-center w-[744px] h-[72px] gap-[32px] m-[24px]">
+        <div className="flex items-center w-[744px] h-[72px] gap-[32px]">
             <PlayerField playerName={props.whiteName} white={true} bgColor={whitePlayerBg} gameResult={pointsWhite}/>
 
             <button 
